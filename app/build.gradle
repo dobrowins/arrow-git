@@ -1,0 +1,50 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply from: "../deps.gradle"
+apply from: "../config.gradle"
+
+android {
+  compileSdkVersion config.compileSdkVersion
+  defaultConfig {
+    applicationId config.applicationId
+    minSdkVersion config.minSdkVersion
+    targetSdkVersion config.targetSdkVersion
+    versionCode config.versionCode
+    versionName config.versionName
+    testInstrumentationRunner config.testInstrumentationRunner
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      debuggable false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+    debug {
+      minifyEnabled false
+      debuggable true
+    }
+  }
+}
+
+dependencies {
+  implementation(
+      fileTree(dir: 'libs', include: ['*.jar']),
+      project(path: ':common'),
+      project(path: ':repository'),
+      project(path: ':domain'),
+  )
+
+  kapt(
+      deps.arrow.annotations,
+      deps.moxy.compiler,
+  )
+
+  testImplementation(
+      deps.junit,
+  )
+
+  androidTestImplementation 'com.android.support.test:runner:1.0.2'
+
+}

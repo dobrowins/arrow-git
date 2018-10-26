@@ -1,0 +1,42 @@
+apply plugin: 'com.android.library'
+apply from: "../deps.gradle"
+apply from: "../config.gradle"
+
+android {
+  compileSdkVersion config.compileSdkVersion
+  defaultConfig {
+    minSdkVersion config.minSdkVersion
+    targetSdkVersion config.targetSdkVersion
+    versionCode config.versionCode
+    versionName config.versionName
+    testInstrumentationRunner config.testInstrumentationRunner
+  }
+}
+
+dependencies {
+  api(
+      fileTree(dir: 'libs', include: ['*.jar']),
+      deps.android.support.appCompat,
+      deps.android.support.constraintLayout,
+      deps.android.support.recyclerView,
+      deps.kotlin.stdlib.jdk,
+      deps.kotlin.coroutines.common,
+      deps.kotlin.coroutines.jdk,
+      deps.kotlin.coroutines.android,
+      deps.arrow.core,
+      deps.arrow.syntax,
+      deps.arrow.typeclasses,
+      deps.arrow.data,
+      deps.arrow.instances,
+      deps.arrow.instances_data,
+      deps.moxy.appcompat,
+      deps.moxy.moxy,
+      deps.moxy.moxyAndroid,
+      deps.retrofit.client,
+      deps.retrofit.adapterKotlinCoroutines,
+      deps.retrofit.gsonConverter,
+      deps.db.paper,
+      deps.cicerone,
+      deps.timber,
+  )
+}

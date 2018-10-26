@@ -1,0 +1,22 @@
+apply plugin: 'com.android.library'
+apply from: "../deps.gradle"
+apply from: "../config.gradle"
+
+android {
+  compileSdkVersion config.compileSdkVersion
+  defaultConfig {
+    minSdkVersion config.minSdkVersion
+    targetSdkVersion config.targetSdkVersion
+    versionCode config.versionCode
+    versionName config.versionName
+    testInstrumentationRunner config.testInstrumentationRunner
+  }
+}
+
+
+dependencies {
+  implementation(
+      fileTree(dir: 'libs', include: ['*.jar']),
+      project(path: ':common'),
+  )
+}
