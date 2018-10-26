@@ -38,5 +38,6 @@ dependencies {
       deps.db.paper,
       deps.cicerone,
       deps.timber,
+      deps.toothpick.runtime,
   )
 }
