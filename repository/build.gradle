@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-kapt'
 apply from: "../deps.gradle"
 apply from: "../config.gradle"
 
@@ -18,18 +17,12 @@ dependencies {
     implementation(
             fileTree(dir: 'libs', include: ['*.jar']),
             project(path: ':common'),
-            project(path: ':domain'),
+            //project(path: ':domain'),
     )
 }
 
-kapt {
-    arguments {
-        arg("toothpick_registry_package_name", 'com.dobrowins.arrowktplayground.repository')
-    }
-}
-
-kotlin {
-    experimental {
-        coroutines "enable"
-    }
-}
+//kapt {
+//    arguments {
+//        arg("toothpick_registry_package_name", 'com.dobrowins.arrowktplayground.repository')
+//    }
+//}
