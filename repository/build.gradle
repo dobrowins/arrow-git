@@ -27,3 +27,9 @@ kapt {
         arg("toothpick_registry_package_name", 'com.dobrowins.arrowktplayground.repository')
     }
 }
+
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}

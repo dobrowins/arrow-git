@@ -1,10 +1,15 @@
 package com.dobrowins.arrowktplayground.repository
 
-import arrow.data.Ior
+import arrow.effects.ForIO
 import arrow.effects.IO
+import arrow.effects.extensions
+import arrow.effects.fix
+import arrow.syntax.function.andThen
+import arrow.typeclasses.binding
 import com.dobrowins.arrowktplayground.repository.api.GithubApi
 import com.dobrowins.domain.data.GitHubRepository
 import com.dobrowins.domain.data.RepositoryData
+import timber.log.Timber
 
 /**
  * @author Artem Dobrovinskiy
@@ -13,11 +18,21 @@ class GitHubRepositoryImpl(
     private val githubApi: GithubApi
 ) : GitHubRepository {
 
-    fun loadRepositoriesById(userId: String): IO<List<RepositoryData>> = IO {
+    override fun loadRepositoriesById(userId: String): IO<List<RepositoryData>> =
+        ForIO extensions {
+            binding {
+                githubApi.getUserRepos(userId).fold(returnEmptyList, mapResponse)
+            }.fix()
+        }
 
-
-
-        TODO ("implement me later, please")
+    private val map: (List<RepositoryDataResponse>) -> List<RepositoryData> = { responseList ->
+        TODO()
     }
+    private val cache: (List<RepositoryDataResponse>) -> List<RepositoryDataResponse> = { TODO() }
+    private val mapResponse = cache andThen map
+
+    private val printError: (Throwable) -> Unit = Timber::e
+    private val emptyList: (Unit) -> List<RepositoryData> = { emptyList() }
+    private val returnEmptyList = printError andThen emptyList
 
 }
