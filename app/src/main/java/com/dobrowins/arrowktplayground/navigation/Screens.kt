@@ -1,7 +1,7 @@
 package com.dobrowins.arrowktplayground.navigation
 
 /**
- * @author: Artem Dobrobinsky
+ * @author: Artem Dobrovinsky
  */
 const val SCREEN_MAIN = "screen_main"
 const val SCREEN_REPOS = "screen_repos"

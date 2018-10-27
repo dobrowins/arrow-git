@@ -1,4 +1,4 @@
-package com.dobrowins.arrowktplayground.di
+package com.dobrowins.arrowktplayground.di.modules
 
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.NavigatorHolder
@@ -6,7 +6,7 @@ import ru.terrakok.cicerone.Router
 import toothpick.config.Module
 
 /**
- * @author: Artem Dobrobinsky
+ * @author: Artem Dobrovinsky
  */
 class NavigationModule : Module() {
 

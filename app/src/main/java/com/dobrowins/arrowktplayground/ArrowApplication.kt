@@ -4,11 +4,8 @@ import android.app.Application
 import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
-import com.dobrowins.arrowktplayground.di.AndroidModule
-import com.dobrowins.arrowktplayground.di.NavigationModule
-import ru.terrakok.cicerone.Cicerone
-import ru.terrakok.cicerone.NavigatorHolder
-import ru.terrakok.cicerone.Router
+import com.dobrowins.arrowktplayground.di.*
+import com.dobrowins.arrowktplayground.di.modules.*
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 import toothpick.Toothpick
@@ -17,7 +14,7 @@ import toothpick.registries.FactoryRegistryLocator
 import toothpick.registries.MemberInjectorRegistryLocator
 
 /**
- * @author: Artem Dobrobinsky
+ * @author: Artem Dobrovinsky
  */
 class ArrowApplication : Application() {
 
@@ -37,13 +34,9 @@ class ArrowApplication : Application() {
 
 	private val setReleaseToothpick: (Boolean) -> Unit = {
 		Toothpick.setConfiguration(Configuration.forProduction().disableReflection())
-//		FactoryRegistryLocator.setRootRegistry(com.dobrowins.arrowktplayground.FactoryRegistry())
-//		MemberInjectorRegistryLocator.setRootRegistry(com.dobrowins.arrowktplayground.MemberInjectorRegistry())
+		FactoryRegistryLocator.setRootRegistry(com.dobrowins.arrowktplayground.FactoryRegistry())
+		MemberInjectorRegistryLocator.setRootRegistry(com.dobrowins.arrowktplayground.MemberInjectorRegistry())
 	}
-
-	private val cicerone: Cicerone<Router> = Cicerone.create()
-	private val navigatorHolder: NavigatorHolder = cicerone.navigatorHolder
-	private val navigationRouter: Router = cicerone.router
 
 	override fun onCreate() {
 		super.onCreate()
@@ -51,19 +44,18 @@ class ArrowApplication : Application() {
 		initToothpick()
 	}
 
-	private fun initToothpick() {
-
+	private fun initToothpick() =
 		isDebugOption.fold(setDebugToothpick, setReleaseToothpick)
 			.also {
-				val appScope = Toothpick.openScope(this)
+				val appScope = Toothpick.openScope(Scopes.APPLICATION)
 				appScope.installModules(
-					AndroidModule(this),
-					NavigationModule()
+                    AndroidModule(this@ArrowApplication),
+                    NavigationModule(),
+                    DomainModule(),
+                    RepositoriesModule(),
+                    ApiModule()
 				)
-				Toothpick.inject(this, appScope)
+				Toothpick.inject(this@ArrowApplication, appScope)
 			}
-
-
-	}
 
 }

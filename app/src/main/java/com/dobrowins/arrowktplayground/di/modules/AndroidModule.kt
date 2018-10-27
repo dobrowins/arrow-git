@@ -1,4 +1,4 @@
-package com.dobrowins.arrowktplayground.di
+package com.dobrowins.arrowktplayground.di.modules
 
 import android.app.Application
 import android.content.Context
@@ -6,7 +6,7 @@ import android.content.res.Resources
 import toothpick.config.Module
 
 /**
- * @author: Artem Dobrobinsky
+ * @author: Artem Dobrovinsky
  */
 class AndroidModule(application: Application) : Module() {
 

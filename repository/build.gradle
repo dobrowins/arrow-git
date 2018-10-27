@@ -1,22 +1,29 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-kapt'
 apply from: "../deps.gradle"
 apply from: "../config.gradle"
 
 android {
-  compileSdkVersion config.compileSdkVersion
-  defaultConfig {
-    minSdkVersion config.minSdkVersion
-    targetSdkVersion config.targetSdkVersion
-    versionCode config.versionCode
-    versionName config.versionName
-    testInstrumentationRunner config.testInstrumentationRunner
-  }
+    compileSdkVersion config.compileSdkVersion
+    defaultConfig {
+        minSdkVersion config.minSdkVersion
+        targetSdkVersion config.targetSdkVersion
+        versionCode config.versionCode
+        versionName config.versionName
+        testInstrumentationRunner config.testInstrumentationRunner
+    }
 }
 
-
 dependencies {
-  implementation(
-      fileTree(dir: 'libs', include: ['*.jar']),
-      project(path: ':common'),
-  )
+    implementation(
+            fileTree(dir: 'libs', include: ['*.jar']),
+            project(path: ':common'),
+            project(path: ':domain'),
+    )
+}
+
+kapt {
+    arguments {
+        arg("toothpick_registry_package_name", 'com.dobrowins.arrowktplayground.repository')
+    }
 }

@@ -1,8 +1,45 @@
 apply plugin: 'java-library'
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-kapt'
+apply from: '../deps.gradle'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation(
+            deps.kotlin.stdlib.jdk,
+            deps.inject,
+            deps.arrow.core,
+            deps.arrow.syntax,
+            deps.arrow.typeclasses,
+            deps.arrow.data,
+            deps.arrow.instances,
+            deps.arrow.instances_data,
+            deps.arrow.free,
+            deps.arrow.mtl,
+            deps.arrow.effects,
+            deps.arrow.effects_kotlinx_coroutines,
+            deps.arrow.optics,
+            deps.arrow.generic,
+            deps.arrow.recursion,
+    )
 }
 
-sourceCompatibility = "7"
-targetCompatibility = "7"
+repositories {
+    mavenCentral()
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.7"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.7"
+    }
+}
+
+kapt {
+    arguments {
+        arg("toothpick_registry_package_name", 'com.dobrowins.arrowktplayground.domain')
+    }
+}

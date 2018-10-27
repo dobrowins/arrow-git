@@ -6,52 +6,60 @@ apply from: "../deps.gradle"
 apply from: "../config.gradle"
 
 android {
-  compileSdkVersion config.compileSdkVersion
-  defaultConfig {
-    applicationId config.applicationId
-    minSdkVersion config.minSdkVersion
-    targetSdkVersion config.targetSdkVersion
-    versionCode config.versionCode
-    versionName config.versionName
-    testInstrumentationRunner config.testInstrumentationRunner
-    javaCompileOptions {
-      annotationProcessorOptions {
-        arguments = [
-            toothpick_registry_package_name: 'com.dobrowins.arrowktplayground',
-        ]
-      }
+    compileSdkVersion config.compileSdkVersion
+    defaultConfig {
+        applicationId config.applicationId
+        minSdkVersion config.minSdkVersion
+        targetSdkVersion config.targetSdkVersion
+        versionCode config.versionCode
+        versionName config.versionName
+        testInstrumentationRunner config.testInstrumentationRunner
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        toothpick_registry_package_name          : 'com.dobrowins.arrowktplayground',
+                        toothpick_registry_children_package_names: """
+                        com.dobrowins.arrowktplayground.domain, 
+                        com.dobrowins.arrowktplayground.repository
+                    """
+                ]
+            }
+        }
     }
-  }
-  buildTypes {
-    release {
-      minifyEnabled false
-      debuggable false
-      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    buildTypes {
+        all {
+            buildConfigField "String", "BASE_URL", "https://api.github.com"
+            buildConfigField "String", "API_VER", "V3"
+        }
+        release {
+            minifyEnabled false
+            debuggable false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            debuggable true
+        }
     }
-    debug {
-      minifyEnabled false
-      debuggable true
-    }
-  }
 }
 
 dependencies {
-  implementation(
-      fileTree(dir: 'libs', include: ['*.jar']),
-      project(path: ':common'),
-      project(path: ':repository'),
-      project(path: ':domain'),
-  )
+    implementation(
+            fileTree(dir: 'libs', include: ['*.jar']),
+            project(path: ':common'),
+            project(path: ':repository'),
+            project(path: ':domain'),
+    )
 
-  kapt(
-      deps.arrow.annotations,
-      deps.moxy.compiler,
-      deps.toothpick.compiler
-  )
+    kapt(
+            deps.arrow.annotations,
+            deps.moxy.compiler,
+            deps.toothpick.compiler
+    )
 
-  testImplementation(
-      deps.junit,
-  )
+    testImplementation(
+            deps.junit,
+    )
 
-  androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 }
