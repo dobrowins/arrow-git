@@ -17,7 +17,7 @@ dependencies {
     implementation(
             fileTree(dir: 'libs', include: ['*.jar']),
             project(path: ':common'),
-            //project(path: ':domain'),
+            project(path: ':domain'),
     )
 }
 

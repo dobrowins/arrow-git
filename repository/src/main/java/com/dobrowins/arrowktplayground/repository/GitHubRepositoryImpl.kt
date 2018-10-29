@@ -31,8 +31,9 @@ class GitHubRepositoryImpl(
     private val cache: (List<RepositoryDataResponse>) -> List<RepositoryDataResponse> = { TODO() }
     private val mapResponse = cache andThen map
 
-    private val printError: (Throwable) -> Unit = Timber::e
-    private val emptyList: (Unit) -> List<RepositoryData> = { emptyList() }
-    private val returnEmptyList = printError andThen emptyList
+    private val returnEmptyList: (Throwable) -> List<RepositoryData> = { t ->
+        Timber.e(t)
+        emptyList()
+    }
 
 }
