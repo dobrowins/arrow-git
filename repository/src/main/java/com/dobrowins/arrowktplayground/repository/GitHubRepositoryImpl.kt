@@ -4,13 +4,12 @@ import arrow.effects.ForIO
 import arrow.effects.IO
 import arrow.effects.extensions
 import arrow.effects.fix
-import arrow.syntax.function.andThen
 import arrow.syntax.function.forwardCompose
 import arrow.typeclasses.binding
-import com.dobrowins.arrowktplayground.repository.api.GithubApi
-import com.dobrowins.arrowktplayground.repository.cache.GitHubPersistWorker
 import com.dobrowins.arrowktplayground.domain.data.GitHubRepository
 import com.dobrowins.arrowktplayground.domain.data.RepositoryData
+import com.dobrowins.arrowktplayground.repository.api.GithubApi
+import com.dobrowins.arrowktplayground.repository.cache.GitHubPersistWorker
 import timber.log.Timber
 import javax.inject.Inject
 
