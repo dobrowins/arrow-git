@@ -6,6 +6,7 @@ import arrow.core.Option
 import arrow.core.Some
 import com.dobrowins.arrowktplayground.di.*
 import com.dobrowins.arrowktplayground.di.modules.*
+import io.paperdb.Paper
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 import toothpick.Toothpick
@@ -28,11 +29,11 @@ class ArrowApplication : Application() {
 
 	}
 
-	private val setDebugToothpick = {
+	private val setDebugToothpick: (Boolean) -> Unit = {
 		Toothpick.setConfiguration(Configuration.forDevelopment().enableReflection())
 	}
 
-	private val setReleaseToothpick: (Boolean) -> Unit = {
+	private val setReleaseToothpick: () -> Unit = {
 		Toothpick.setConfiguration(Configuration.forProduction().disableReflection())
 		FactoryRegistryLocator.setRootRegistry(com.dobrowins.arrowktplayground.FactoryRegistry())
 		MemberInjectorRegistryLocator.setRootRegistry(com.dobrowins.arrowktplayground.MemberInjectorRegistry())
@@ -42,10 +43,13 @@ class ArrowApplication : Application() {
 		super.onCreate()
 		isDebugOption.fold(setDebugOptions, setReleaseOptions)
 		initToothpick()
+        initPaper()
 	}
 
+    private fun initPaper() = Paper.init(this@ArrowApplication)
+
 	private fun initToothpick() =
-		isDebugOption.fold(setDebugToothpick, setReleaseToothpick)
+		isDebugOption.fold(setReleaseToothpick, setDebugToothpick)
 			.also {
 				val appScope = Toothpick.openScope(Scopes.APPLICATION)
 				appScope.installModules(

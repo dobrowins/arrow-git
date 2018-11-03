@@ -9,6 +9,7 @@ import com.dobrowins.arrowktplayground.base.BaseFragment
 import com.dobrowins.arrowktplayground.di.Scopes
 import com.dobrowins.arrowktplayground.navigation.SCREEN_REPOS
 import com.dobrowins.arrowktplayground.toast
+import com.dobrowins.arrowktplayground.views.repos.ReposFragment
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.android.SupportFragmentNavigator
 import ru.terrakok.cicerone.commands.Replace
@@ -37,6 +38,7 @@ class MainActivity : MvpAppCompatActivity() {
 
     private val startAnew: () -> Unit =
         { navigator.applyCommands(arrayOf(Replace(SCREEN_REPOS, "dobrowins"))) }
+
     private val restoreState: (Bundle) -> Unit = { bundle -> }
 
     override fun onCreate(savedInstanceState: Bundle?) {

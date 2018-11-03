@@ -13,6 +13,6 @@ interface GithubApi {
     @GET("/users/{userId}/repos")
     fun getUserRepos(
         @Path("userId") userId: String
-    ): Either<Throwable, List<RepositoryDataResponse>>
+    ): Either<Throwable, List<RepositoryDataResponse?>>
 
 }

@@ -26,10 +26,13 @@ android {
             }
         }
     }
+
+    def baseUrl = '"' + 'https://api.github.com' + '"'
+    def apiVersion = '"' + 'V3' + '"'
     buildTypes {
         all {
-            buildConfigField "String", "BASE_URL", "https://api.github.com"
-            buildConfigField "String", "API_VER", "V3"
+            buildConfigField 'String', 'BASE_URL', baseUrl
+            buildConfigField "String", "API_VER", apiVersion
         }
         release {
             minifyEnabled false

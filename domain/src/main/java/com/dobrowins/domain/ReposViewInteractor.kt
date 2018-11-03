@@ -1,6 +1,6 @@
 package com.dobrowins.domain
 
-import arrow.effects.fix
+import arrow.effects.IO
 import com.dobrowins.domain.data.GitHubRepository
 import com.dobrowins.domain.data.RepositoryData
 import javax.inject.Inject
@@ -12,12 +12,11 @@ class ReposViewInteractorImpl @Inject constructor(
     private val gitHubRepository: GitHubRepository
 ): ReposViewInteractor {
 
-    override fun fetchReposData(userId: String): List<RepositoryData> =
+    override fun fetchReposData(userId: String): IO<List<RepositoryData>> =
         gitHubRepository.loadRepositoriesById(userId)
-            .unsafeRunSync()
 
 }
 
 interface ReposViewInteractor {
-    fun fetchReposData(userId: String): List<RepositoryData>
+    fun fetchReposData(userId: String): IO<List<RepositoryData>>
 }

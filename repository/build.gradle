@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 apply from: "../deps.gradle"
 apply from: "../config.gradle"
 
@@ -19,10 +20,14 @@ dependencies {
             project(path: ':common'),
             project(path: ':domain'),
     )
-}
 
-//kapt {
-//    arguments {
-//        arg("toothpick_registry_package_name", 'com.dobrowins.arrowktplayground.repository')
-//    }
-//}
+    androidTestImplementation(
+            deps.android.x.testRunner,
+            deps.android.x.testRules,
+    )
+
+    testImplementation(
+            deps.kotlin.test.jdk,
+            deps.junit,
+    )
+}
