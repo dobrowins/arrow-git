@@ -9,8 +9,8 @@ import arrow.syntax.function.forwardCompose
 import arrow.typeclasses.binding
 import com.dobrowins.arrowktplayground.repository.api.GithubApi
 import com.dobrowins.arrowktplayground.repository.cache.GitHubPersistWorker
-import com.dobrowins.domain.data.GitHubRepository
-import com.dobrowins.domain.data.RepositoryData
+import com.dobrowins.arrowktplayground.domain.data.GitHubRepository
+import com.dobrowins.arrowktplayground.domain.data.RepositoryData
 import timber.log.Timber
 import javax.inject.Inject
 

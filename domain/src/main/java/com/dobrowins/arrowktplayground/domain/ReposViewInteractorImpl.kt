@@ -1,8 +1,8 @@
-package com.dobrowins.domain
+package com.dobrowins.arrowktplayground.domain
 
 import arrow.effects.IO
-import com.dobrowins.domain.data.GitHubRepository
-import com.dobrowins.domain.data.RepositoryData
+import com.dobrowins.arrowktplayground.domain.data.GitHubRepository
+import com.dobrowins.arrowktplayground.domain.data.RepositoryData
 import javax.inject.Inject
 
 /**
@@ -10,13 +10,9 @@ import javax.inject.Inject
  */
 class ReposViewInteractorImpl @Inject constructor(
     private val gitHubRepository: GitHubRepository
-): ReposViewInteractor {
+) : ReposViewInteractor {
 
     override fun fetchReposData(userId: String): IO<List<RepositoryData>> =
         gitHubRepository.loadRepositoriesById(userId)
 
-}
-
-interface ReposViewInteractor {
-    fun fetchReposData(userId: String): IO<List<RepositoryData>>
 }

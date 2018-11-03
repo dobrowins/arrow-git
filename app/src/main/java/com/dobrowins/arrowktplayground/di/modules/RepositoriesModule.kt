@@ -1,7 +1,7 @@
 package com.dobrowins.arrowktplayground.di.modules
 
 import com.dobrowins.arrowktplayground.repository.GitHubRepositoryImpl
-import com.dobrowins.domain.data.GitHubRepository
+import com.dobrowins.arrowktplayground.domain.data.GitHubRepository
 import toothpick.config.Module
 
 /**

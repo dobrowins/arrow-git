@@ -8,6 +8,7 @@ dependencies {
     implementation(
             deps.kotlin.stdlib.jdk,
             deps.inject,
+            deps.toothpick.runtime,
             deps.arrow.core,
             deps.arrow.syntax,
             deps.arrow.typeclasses,
@@ -21,6 +22,9 @@ dependencies {
             deps.arrow.optics,
             deps.arrow.generic,
             deps.arrow.recursion,
+    )
+    kapt(
+            deps.toothpick.compiler
     )
 }
 
@@ -40,6 +44,6 @@ compileTestKotlin {
 
 kapt {
     arguments {
-        arg("toothpick_registry_package_name", 'com.dobrowins.arrowktplayground.domain')
+        arg("toothpick_registry_package_name", "com.dobrowins.arrowktplayground.domain")
     }
 }

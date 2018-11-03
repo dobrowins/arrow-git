@@ -1,7 +1,7 @@
 package com.dobrowins.arrowktplayground.di.modules
 
 import com.dobrowins.arrowktplayground.BuildConfig
-import com.dobrowins.arrowktplayground.common.BaseUrlPath
+import com.dobrowins.arrowktplayground.di.BaseUrlPath
 import com.dobrowins.arrowktplayground.di.providers.GithubApiProvider
 import com.dobrowins.arrowktplayground.di.providers.GsonProvider
 import com.dobrowins.arrowktplayground.di.providers.OkHttpClientProvider

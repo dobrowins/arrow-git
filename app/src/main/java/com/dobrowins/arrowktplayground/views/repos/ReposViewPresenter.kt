@@ -5,8 +5,8 @@ import arrow.syntax.function.forwardCompose
 import com.arellomobile.mvp.InjectViewState
 import com.dobrowins.arrowktplayground.base.BasePresenter
 import com.dobrowins.arrowktplayground.base.adapters.HolderType
-import com.dobrowins.domain.ReposViewInteractor
-import com.dobrowins.domain.data.RepositoryData
+import com.dobrowins.arrowktplayground.domain.ReposViewInteractor
+import com.dobrowins.arrowktplayground.domain.data.RepositoryData
 import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 

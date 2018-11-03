@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply from: "../deps.gradle"
 apply from: "../config.gradle"
 
@@ -14,11 +15,21 @@ android {
     }
 }
 
+kapt {
+    arguments{
+        arg("toothpick_registry_package_name", "com.dobrowins.arrowktplayground.repository")
+    }
+}
+
 dependencies {
     implementation(
             fileTree(dir: 'libs', include: ['*.jar']),
             project(path: ':common'),
             project(path: ':domain'),
+    )
+
+    kapt(
+            deps.toothpick.compiler
     )
 
     androidTestImplementation(

@@ -1,7 +1,7 @@
 package com.dobrowins.arrowktplayground.di.modules
 
-import com.dobrowins.domain.ReposViewInteractor
-import com.dobrowins.domain.ReposViewInteractorImpl
+import com.dobrowins.arrowktplayground.domain.ReposViewInteractor
+import com.dobrowins.arrowktplayground.domain.ReposViewInteractorImpl
 import toothpick.config.Module
 
 /**

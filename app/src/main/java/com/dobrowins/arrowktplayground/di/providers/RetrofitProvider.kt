@@ -1,5 +1,7 @@
 package com.dobrowins.arrowktplayground.di.providers
 
+import com.dobrowins.arrowktplayground.BuildConfig
+import com.dobrowins.arrowktplayground.di.BaseUrlPath
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -13,7 +15,7 @@ import javax.inject.Provider
 class RetrofitProvider @Inject constructor(
     private val gson: Gson,
     private val okHttpClient: OkHttpClient,
-    private val baseUrl: String
+    @BaseUrlPath private val baseUrl: String
 ) : Provider<Retrofit> {
 
     override fun get(): Retrofit = Retrofit.Builder()

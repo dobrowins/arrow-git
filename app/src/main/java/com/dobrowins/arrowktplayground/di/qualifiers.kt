@@ -1,4 +1,4 @@
-package com.dobrowins.arrowktplayground.common
+package com.dobrowins.arrowktplayground.di
 
 import javax.inject.Qualifier
 

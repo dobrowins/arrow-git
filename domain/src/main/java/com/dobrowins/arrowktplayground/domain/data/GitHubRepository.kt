@@ -1,4 +1,4 @@
-package com.dobrowins.domain.data
+package com.dobrowins.arrowktplayground.domain.data
 
 import arrow.effects.IO
 
