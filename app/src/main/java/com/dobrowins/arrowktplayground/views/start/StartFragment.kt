@@ -18,8 +18,7 @@ import javax.inject.Inject
 /**
  * @author Artem Dobrovinskiy
  */
-interface StartView : BaseView {
-}
+interface StartView : BaseView
 
 class StartFragment : BaseFragment(), StartView {
 
