@@ -18,6 +18,10 @@ import javax.inject.Inject
 
 class MainActivity : MvpAppCompatActivity() {
 
+    companion object {
+        private const val DEFAULT_REPO = "dobrowins"
+    }
+
     @Inject
     lateinit var navigatorHolder: NavigatorHolder
 
@@ -25,8 +29,8 @@ class MainActivity : MvpAppCompatActivity() {
         object : SupportFragmentNavigator(supportFragmentManager, id.rootActivityMain) {
             override fun createFragment(screenKey: String?, data: Any?): BaseFragment =
                 when (screenKey) {
-                    SCREEN_REPOS -> ReposFragment()
-                    else -> throw IllegalArgumentException("unknown fragment key")
+                    SCREEN_REPOS -> ReposFragment.getInstance(data.toString())
+                    else -> throw IllegalArgumentException("$screenKey is unknown fragment key!")
                 }
 
             override fun showSystemMessage(message: String?) {
@@ -36,10 +40,12 @@ class MainActivity : MvpAppCompatActivity() {
             override fun exit() = finish()
         }
 
-    private val startAnew: () -> Unit =
-        { navigator.applyCommands(arrayOf(Replace(SCREEN_REPOS, "dobrowins"))) }
+    private val startAnew: () -> Unit = {
+        val defaultCommand = Replace(SCREEN_REPOS, DEFAULT_REPO)
+        navigator.applyCommands(arrayOf(defaultCommand))
+    }
 
-    private val restoreState: (Bundle) -> Unit = { bundle -> }
+    private val restoreState: (Bundle) -> Unit = {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         inject()
@@ -49,7 +55,7 @@ class MainActivity : MvpAppCompatActivity() {
     }
 
     private fun inject() {
-        Toothpick.openScope(Scopes.ACTIVITY)
+        Toothpick.openScopes(Scopes.APPLICATION, Scopes.ACTIVITY)
             .also { scope ->
                 Toothpick.inject(this@MainActivity, scope)
                 Toothpick.closeScope(scope.name)
@@ -66,6 +72,4 @@ class MainActivity : MvpAppCompatActivity() {
         navigatorHolder.removeNavigator()
     }
 
-
 }
-

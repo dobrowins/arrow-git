@@ -1,15 +1,21 @@
 package com.dobrowins.arrowktplayground.repository
 
-import arrow.effects.ForIO
+import arrow.Kind
+import arrow.core.Try
+import arrow.core.right
 import arrow.effects.IO
-import arrow.effects.extensions
+import arrow.effects.async
 import arrow.effects.fix
+import arrow.effects.monadError
+import arrow.effects.typeclasses.Async
 import arrow.syntax.function.forwardCompose
 import arrow.typeclasses.binding
 import com.dobrowins.arrowktplayground.domain.data.GitHubRepository
 import com.dobrowins.arrowktplayground.domain.data.RepositoryData
 import com.dobrowins.arrowktplayground.repository.api.GithubApi
 import com.dobrowins.arrowktplayground.repository.cache.GitHubPersistWorker
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -22,14 +28,26 @@ class GitHubRepositoryImpl @Inject constructor(
 ) : GitHubRepository {
 
     override fun loadRepositoriesById(userId: String): IO<List<RepositoryData>> =
-        ForIO extensions {
-            binding {
-                githubApi.getUserRepos(userId)
-                    .fold(
-                        ifLeft = returnEmptyList,
-                        ifRight = cache forwardCompose map
-                    )
-            }.fix()
+        IO.monadError().binding {
+            runInAsyncContext(
+                λ = { githubApi.getUserRepos(userId) },
+                onError = returnEmptyList,
+                onSuccess = cache forwardCompose map,
+                AC = IO.async()
+            ).bind()
+        }.fix()
+
+    private fun <F, A, B> runInAsyncContext(
+        λ: () -> A,
+        onError: (Throwable) -> B,
+        onSuccess: (A) -> B,
+        AC: Async<F>
+    ): Kind<F, B> =
+        AC.async { proc ->
+            GlobalScope.launch {
+                val result = Try { λ() }.fold(onError, onSuccess)
+                proc(result.right())
+            }
         }
 
     private val returnEmptyList: (Throwable) -> List<RepositoryData> = {

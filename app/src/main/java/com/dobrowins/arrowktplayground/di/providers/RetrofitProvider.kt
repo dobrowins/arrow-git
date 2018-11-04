@@ -1,6 +1,5 @@
 package com.dobrowins.arrowktplayground.di.providers
 
-import com.dobrowins.arrowktplayground.BuildConfig
 import com.dobrowins.arrowktplayground.di.BaseUrlPath
 import com.google.gson.Gson
 import okhttp3.OkHttpClient

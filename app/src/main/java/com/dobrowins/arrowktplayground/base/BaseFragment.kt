@@ -17,7 +17,7 @@ abstract class BaseFragment : Fragment() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-        Toothpick.openScope(Scopes.FRAGMENT)
+        Toothpick.openScopes(Scopes.APPLICATION, Scopes.FRAGMENT)
             .also { scope ->
                 Toothpick.inject(this, scope)
                 Toothpick.closeScope(scope.name)

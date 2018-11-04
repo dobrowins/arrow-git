@@ -1,6 +1,6 @@
 package com.dobrowins.arrowktplayground.di.modules
 
-import com.dobrowins.arrowktplayground.repository.GitHubRepositoryImpl
+import com.dobrowins.arrowktplayground.di.providers.GitHubRepositoryImplProvider
 import com.dobrowins.arrowktplayground.domain.data.GitHubRepository
 import toothpick.config.Module
 
@@ -9,6 +9,8 @@ import toothpick.config.Module
  */
 class RepositoriesModule : Module() {
     init {
-        bind(GitHubRepository::class.java) to GitHubRepositoryImpl::class.java
+        bind(GitHubRepository::class.java).toProvider(GitHubRepositoryImplProvider::class.java)
+            .singletonInScope()
     }
 }
+

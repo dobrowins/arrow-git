@@ -18,6 +18,16 @@ import javax.inject.Inject
  */
 class ReposFragment : BaseFragment(), ReposView {
 
+    companion object {
+        fun getInstance(data: String): ReposFragment {
+            val fragment = ReposFragment()
+            val bundle = Bundle()
+            bundle.putString(KEY_REPO_ID, data)
+            fragment.arguments = bundle
+            return fragment
+        }
+    }
+
     @Inject
     @InjectPresenter
     lateinit var presenter: ReposViewPresenter
