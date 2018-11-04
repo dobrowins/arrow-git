@@ -1,10 +1,7 @@
 package com.dobrowins.arrowktplayground.views.repos
 
-import arrow.core.Either
-import arrow.syntax.function.forwardCompose
 import com.arellomobile.mvp.InjectViewState
 import com.dobrowins.arrowktplayground.base.BasePresenter
-import com.dobrowins.arrowktplayground.base.adapters.HolderType
 import com.dobrowins.arrowktplayground.domain.ReposViewInteractor
 import com.dobrowins.arrowktplayground.domain.data.RepositoryData
 import ru.terrakok.cicerone.Router
@@ -20,25 +17,12 @@ class ReposViewPresenter @Inject constructor(
 ) : BasePresenter<ReposView>() {
 
     fun loadData(repoId: String) =
-        reposViewInteractor.fetchReposData(repoId)
-            .unsafeRunAsync(showRepos)
+        reposViewInteractor.fetchReposData(repoId).map(mapToItems)
 
     fun onToolbarNavigationIconPressed() = router.exit()
 
-    private val showRepos: (Either<Throwable, List<RepositoryData>>) -> Unit = {
-        it.fold(
-            ifLeft = showEmptyList,
-            ifRight = mapToItems forwardCompose viewState::showRepos
-        )
-    }
-
-    private val showEmptyList: (Throwable) -> Unit = { throwable ->
-        throwable.message.orEmpty().let(viewState::showToast)
-        viewState.showRepos(emptyList())
-    }
-
     private val mapToItems: (List<RepositoryData>) -> List<RepoItem> = { responseRepos ->
-        responseRepos.map {
+        val mapped = responseRepos.map {
             RepoItem(
                 it.id,
                 it.name,
@@ -47,16 +31,7 @@ class ReposViewPresenter @Inject constructor(
                 it.description
             )
         }
+        mapped
     }
 
-}
-
-data class RepoItem(
-    val id: Int,
-    val name: String,
-    val fullName: String,
-    val htmlUrl: String,
-    val description: String
-) : HolderType {
-    override fun type(): Int = HolderType.REPO
 }

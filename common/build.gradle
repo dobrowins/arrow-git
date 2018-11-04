@@ -19,6 +19,7 @@ dependencies {
             deps.android.support.appCompat,
             deps.android.support.constraintLayout,
             deps.android.support.recyclerView,
+            deps.android.support.design,
             deps.kotlin.stdlib.jdk,
             deps.kotlin.coroutines.common,
             deps.kotlin.coroutines.jdk,

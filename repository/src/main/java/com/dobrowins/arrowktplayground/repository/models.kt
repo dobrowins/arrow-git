@@ -1,11 +1,14 @@
 package com.dobrowins.arrowktplayground.repository
 
 import com.google.gson.annotations.SerializedName
-import java.security.acl.Owner
 
 /**
  * @author Artem Dobrovinskiy
  */
+
+data class ReposResponse(
+    val repos: List<RepositoryDataResponse?>
+)
 
 data class RepositoryDataResponse(
     @SerializedName("id")

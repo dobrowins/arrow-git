@@ -1,9 +1,9 @@
 package com.dobrowins.arrowktplayground.views.repos
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.transition.TransitionManager
 import android.view.View
-import android.widget.Toast
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.dobrowins.arrowktplayground.R
@@ -35,9 +35,9 @@ class ReposFragment : BaseFragment(), ReposView {
     @ProvidePresenter
     fun providePresenter() = presenter
 
-    private lateinit var repoId: String
-
     override val layoutId: Int = R.layout.fragment_repos
+
+    private lateinit var repoId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,15 +46,28 @@ class ReposFragment : BaseFragment(), ReposView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initToolbar()
+        loadRepos()
+    }
+
+    private fun initToolbar() {
         tbFragmentRepos.apply {
             title = null
             setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
             setNavigationOnClickListener { presenter.onToolbarNavigationIconPressed() }
         }
-        presenter.loadData(repoId)
     }
 
-    override fun showRepos(repos: List<RepoItem>) {
+    private fun loadRepos() {
+        presenter.loadData(repoId).unsafeRunAsync { either ->
+            either.fold(
+                { showRepos(emptyList()) },
+                { items -> showRepos(items) }
+            )
+        }
+    }
+
+    override fun showRepos(repos: List<RepoItem>): Unit = runOnUiThread {
         val reposAdapter = ReposAdapter(
             repoOnClickFunc = {
                 // TODO: open repo detailed info
@@ -69,12 +82,13 @@ class ReposFragment : BaseFragment(), ReposView {
         rvReposFragment.visibility = View.VISIBLE
     }
 
-    override fun showToast(text: String) =
-        Toast.makeText(activity, text, Toast.LENGTH_LONG).show()
+    override fun showSnackbar(text: String) = runOnUiThread {
+        Snackbar.make(rootFragmentRepos, text, Snackbar.LENGTH_SHORT).show()
+    }
 
 }
 
 interface ReposView : BaseView {
     fun showRepos(repos: List<RepoItem>)
-    fun showToast(text: String)
+    fun showSnackbar(text: String)
 }

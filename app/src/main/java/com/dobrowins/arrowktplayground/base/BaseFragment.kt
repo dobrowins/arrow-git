@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.dobrowins.arrowktplayground.di.Scopes
+import timber.log.Timber
 import toothpick.Toothpick
 
 /**
@@ -27,9 +28,10 @@ abstract class BaseFragment : Fragment() {
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
 		inflater.inflate(layoutId, container, false)
 
-	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-		super.onViewCreated(view, savedInstanceState)
-
-	}
+    fun runOnUiThread(f: () -> Unit): Unit = {
+        activity?.runOnUiThread {
+            f.invoke()
+        } ?: run { Timber.d("activity is not present") }
+    }.invoke()
 
 }

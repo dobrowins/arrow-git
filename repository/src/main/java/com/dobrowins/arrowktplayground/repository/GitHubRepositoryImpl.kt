@@ -30,7 +30,9 @@ class GitHubRepositoryImpl @Inject constructor(
     override fun loadRepositoriesById(userId: String): IO<List<RepositoryData>> =
         IO.monadError().binding {
             runInAsyncContext(
-                λ = { githubApi.getUserRepos(userId) },
+                λ = {
+                    githubApi.getUserRepos(userId).execute().body() ?: emptyList()
+                },
                 onError = returnEmptyList,
                 onSuccess = cache forwardCompose map,
                 AC = IO.async()
@@ -63,7 +65,7 @@ class GitHubRepositoryImpl @Inject constructor(
         }
 
     private val map: (List<RepositoryDataResponse>) -> List<RepositoryData> = { responseList ->
-        responseList.map { repository ->
+        val mapped = responseList.map { repository ->
             RepositoryData(
                 id = repository.id?.toInt() ?: 0,
                 name = repository.name.orEmpty(),
@@ -72,6 +74,7 @@ class GitHubRepositoryImpl @Inject constructor(
                 description = repository.description.orEmpty()
             )
         }
+        mapped
     }
 
 }
