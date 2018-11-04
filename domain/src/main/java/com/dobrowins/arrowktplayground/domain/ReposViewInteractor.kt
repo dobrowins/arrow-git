@@ -7,5 +7,5 @@ import com.dobrowins.arrowktplayground.domain.data.RepositoryData
  * @author Artem Dobrovinskiy
  */
 interface ReposViewInteractor {
-    fun fetchReposData(userId: String): IO<List<RepositoryData>>
+    fun fetchReposData(profileName: String): IO<List<RepositoryData>>
 }

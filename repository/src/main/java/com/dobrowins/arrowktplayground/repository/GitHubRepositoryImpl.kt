@@ -27,11 +27,11 @@ class GitHubRepositoryImpl @Inject constructor(
     private val gitHubPersistWorker: GitHubPersistWorker
 ) : GitHubRepository {
 
-    override fun loadRepositoriesById(userId: String): IO<List<RepositoryData>> =
+    override fun loadRepositoriesById(profileName: String): IO<List<RepositoryData>> =
         IO.monadError().binding {
             runInAsyncContext(
                 λ = {
-                    githubApi.getUserRepos(userId).execute().body() ?: emptyList()
+                    githubApi.getUserRepos(profileName).execute().body() ?: emptyList()
                 },
                 onError = returnEmptyList,
                 onSuccess = cache forwardCompose map,

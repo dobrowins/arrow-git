@@ -12,6 +12,7 @@ class ReposAdapter(
 
     init {
         delegates.add(HolderType.REPO, RepoDelegate(repoOnClickFunc))
+        // TODO: add fullscreen error VH
     }
 
 }

@@ -6,5 +6,5 @@ import arrow.effects.IO
  * @author Artem Dobrovinskiy
  */
 interface GitHubRepository {
-    fun loadRepositoriesById(userId: String): IO<List<RepositoryData>>
+    fun loadRepositoriesById(profileName: String): IO<List<RepositoryData>>
 }

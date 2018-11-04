@@ -16,8 +16,8 @@ class ReposViewPresenter @Inject constructor(
     private val reposViewInteractor: ReposViewInteractor
 ) : BasePresenter<ReposView>() {
 
-    fun loadData(repoId: String) =
-        reposViewInteractor.fetchReposData(repoId).map(mapToItems)
+    fun loadData(profileName: String) =
+        reposViewInteractor.fetchReposData(profileName).map(mapToItems)
 
     fun onToolbarNavigationIconPressed() = router.exit()
 
