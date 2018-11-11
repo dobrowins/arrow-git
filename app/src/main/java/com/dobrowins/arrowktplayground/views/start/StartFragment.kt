@@ -1,7 +1,6 @@
 package com.dobrowins.arrowktplayground.views.start
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.view.View
 import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
 import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE
@@ -12,6 +11,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.dobrowins.arrowktplayground.R
 import com.dobrowins.arrowktplayground.base.BaseFragment
 import com.dobrowins.arrowktplayground.base.BaseView
+import com.dobrowins.arrowktplayground.views.mapThrowableMessage
 import kotlinx.android.synthetic.main.fragment_start.*
 import javax.inject.Inject
 
@@ -47,7 +47,9 @@ class StartFragment : BaseFragment(), StartView {
                     IME_ACTION_DONE -> {
                         val profileName = textView.text.toString()
                         presenter.onEditTextDoneButtonClicked(profileName).fold(
-                            ifLeft = mapThrowableMessage forwardCompose showError,
+                            ifLeft = mapThrowableMessage forwardCompose showSnackbar(
+                                rootStartFragment
+                            ),
                             ifRight = startReposFragment
                         )
                         true
@@ -56,12 +58,6 @@ class StartFragment : BaseFragment(), StartView {
                 }
             }
         }
-    }
-
-    private val mapThrowableMessage: (Throwable) -> String = { it.message.orEmpty() }
-
-    private val showError: (String) -> Unit = {
-        runOnUiThread { Snackbar.make(rootStartFragment, it, Snackbar.LENGTH_SHORT).show() }
     }
 
     private val startReposFragment: (String) -> Unit = { profileName ->

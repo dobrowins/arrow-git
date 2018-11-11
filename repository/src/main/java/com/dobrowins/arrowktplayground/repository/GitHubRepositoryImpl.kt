@@ -39,6 +39,22 @@ class GitHubRepositoryImpl @Inject constructor(
             ).bind()
         }.fix()
 
+    override fun getRepositoryFromCache(repositoryId: String): IO<RepositoryData?> =
+        IO.monadError().binding {
+            runInAsyncContext(
+                λ = {
+                    TODO()
+                },
+                onError = {
+                    TODO()
+                },
+                onSuccess = {
+                    TODO()
+                },
+                AC = IO.async()
+            ).bind()
+        }.fix()
+
     private fun <F, A, B> runInAsyncContext(
         λ: () -> A,
         onError: (Throwable) -> B,

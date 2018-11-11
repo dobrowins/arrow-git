@@ -7,4 +7,5 @@ import arrow.effects.IO
  */
 interface GitHubRepository {
     fun loadRepositoriesById(profileName: String): IO<List<RepositoryData>>
+    fun getRepositoryFromCache(repositoryId: String): IO<RepositoryData?>
 }

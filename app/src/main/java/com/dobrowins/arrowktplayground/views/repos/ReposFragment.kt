@@ -2,7 +2,6 @@ package com.dobrowins.arrowktplayground.views.repos
 
 import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.transition.TransitionManager
 import android.view.View
@@ -20,7 +19,6 @@ import javax.inject.Inject
  */
 interface ReposView : BaseView {
     fun showRepos(repos: List<RepoItem>)
-    fun showSnackbar(text: String)
 }
 
 class ReposFragment : BaseFragment(), ReposView {
@@ -94,10 +92,6 @@ class ReposFragment : BaseFragment(), ReposView {
         // TODO: add animation appear from bottom upwards
         TransitionManager.beginDelayedTransition(rootFragmentRepos)
         rvReposFragment.visibility = View.VISIBLE
-    }
-
-    override fun showSnackbar(text: String) = runOnUiThread {
-        Snackbar.make(rootFragmentRepos, text, Snackbar.LENGTH_SHORT).show()
     }
 
 }
