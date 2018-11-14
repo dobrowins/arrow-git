@@ -18,62 +18,61 @@ import javax.inject.Inject
 /**
  * @author Artem Dobrovinskiy
  */
-interface RepoDetailView : BaseView
+interface RepoDetailView : BaseView {
+	fun initView(repoData: RepositoryData)
+	fun displayError(t: Throwable)
+}
 
 class RepoDetailFragment : BaseFragment(), RepoDetailView {
 
-    companion object {
-        fun getInstance(repoId: String): RepoDetailFragment {
-            val fragment = RepoDetailFragment()
-            val bundle = Bundle()
-            bundle.putString(KEY_REPO_ID, repoId)
-            fragment.arguments = bundle
-            return fragment
-        }
-    }
+	companion object {
+		fun getInstance(repoId: String): RepoDetailFragment {
+			val fragment = RepoDetailFragment()
+			val bundle = Bundle()
+			bundle.putString(KEY_REPO_ID, repoId)
+			fragment.arguments = bundle
+			return fragment
+		}
+	}
 
-    override val layoutId: Int = R.layout.fragment_repo_detail
+	override val layoutId: Int = R.layout.fragment_repo_detail
 
-    @Inject
-    @InjectPresenter
-    lateinit var presenter: RepoDetailPresenter
+	@Inject
+	@InjectPresenter
+	lateinit var presenter: RepoDetailPresenter
 
-    @ProvidePresenter
-    fun providePresenter() = presenter
+	@ProvidePresenter
+	fun providePresenter() = presenter
 
-    private lateinit var repoId: String
+	private lateinit var repoId: String
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        repoId = arguments?.getString(KEY_REPO_ID).orEmpty()
-    }
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		repoId = arguments?.getString(KEY_REPO_ID).orEmpty()
+	}
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initToolbar()
-        presenter.fetchRepoData(repoId).unsafeRunAsync { either ->
-            either.fold(
-                ifLeft = displayError,
-                ifRight = initView
-            )
-        }
-    }
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+		initToolbar()
+		presenter.fetchRepoData(repoId)
+	}
 
-    private fun initToolbar() =
-        tbFragmentRepoDetail.run {
-            navigationIcon =
-                    ContextCompat.getDrawable(context, R.drawable.ic_arrow_back_white_24dp)
-            setNavigationOnClickListener { presenter.onNavigationIconClicked() }
-        }
+	override fun initView(repoData: RepositoryData) = runOnUiThread {
+		val name = repoData.fullName
+		val description = repoData.description
+		name.let(tvFragmentRepoDetailTitle::setText)
+		description.let(tvFragmentRepoDetailDescription::setText)
+	}
 
-    private val initView: (RepositoryData) -> Unit = { repoData ->
-        val name = repoData.fullName
-        val description = repoData.description
-        name.let(tvFragmentRepoDetailTitle::setText)
-        description.let(tvFragmentRepoDetailDescription::setText)
-    }
+	override fun displayError(t: Throwable) = runOnUiThread {
+		mapThrowableMessage forwardCompose showSnackbar(rootFragmentRepoDetail)
+	}
 
-    private val displayError =
-        mapThrowableMessage forwardCompose showSnackbar(rootFragmentRepoDetail)
+	private fun initToolbar() =
+		tbFragmentRepoDetail.run {
+			navigationIcon =
+					ContextCompat.getDrawable(context, R.drawable.ic_arrow_back_white_24dp)
+			setNavigationOnClickListener { presenter.onNavigationIconClicked() }
+		}
 
 }

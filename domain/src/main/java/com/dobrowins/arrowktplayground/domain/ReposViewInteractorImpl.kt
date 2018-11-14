@@ -12,7 +12,7 @@ class ReposViewInteractorImpl @Inject constructor(
     private val gitHubRepository: GitHubRepository
 ) : ReposViewInteractor {
 
-    override fun fetchReposData(profileName: String): IO<List<RepositoryData>> =
+    override fun fetchReposData(profileName: String): IO<List<RepositoryData?>?> =
         gitHubRepository.loadRepositoriesById(profileName)
 
 }

@@ -22,7 +22,7 @@ class ReposItemVH(itemView: ViewGroup, private val λ: () -> Unit) :
         item as RepoItem
         item.fullName.let(tvRepoItemTitle::setText)
         item.htmlUrl.let(tvRepoItemUrl::setText)
-        rootRepoItem.setOnClickListener { λ.invoke() }
+        rootRepoItem.setOnClickListener { λ() }
         return@with
     }
 

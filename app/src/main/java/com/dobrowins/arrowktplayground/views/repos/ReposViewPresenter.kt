@@ -1,5 +1,6 @@
 package com.dobrowins.arrowktplayground.views.repos
 
+import arrow.effects.IO
 import com.arellomobile.mvp.InjectViewState
 import com.dobrowins.arrowktplayground.base.BasePresenter
 import com.dobrowins.arrowktplayground.domain.ReposViewInteractor
@@ -17,22 +18,21 @@ class ReposViewPresenter @Inject constructor(
     private val reposViewInteractor: ReposViewInteractor
 ) : BasePresenter<ReposView>() {
 
-    fun loadData(profileName: String) =
+    fun loadData(profileName: String): IO<List<RepoItem>> =
         reposViewInteractor.fetchReposData(profileName).map(mapToItems)
 
     fun onToolbarNavigationIconPressed() = router.navigateTo(SCREEN_START)
 
-    private val mapToItems: (List<RepositoryData>) -> List<RepoItem> = { responseRepos ->
-        val mapped = responseRepos.map {
+    private val mapToItems: (List<RepositoryData?>?) -> List<RepoItem> = { responseRepos ->
+        responseRepos?.filterNotNull()?.map { data ->
             RepoItem(
-                it.id,
-                it.name,
-                it.fullName,
-                it.htmlUrl,
-                it.description
+                id = data.id,
+                name = data.name,
+                fullName = data.fullName,
+                htmlUrl = data.htmlUrl,
+                description = data.description
             )
-        }
-        mapped
+        } ?: emptyList()
     }
 
 }
