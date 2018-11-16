@@ -1,11 +1,12 @@
 package com.dobrowins.arrowktplayground.views.repos
 
-import arrow.effects.IO
+import arrow.syntax.function.andThen
 import com.arellomobile.mvp.InjectViewState
 import com.dobrowins.arrowktplayground.base.BasePresenter
 import com.dobrowins.arrowktplayground.domain.ReposViewInteractor
 import com.dobrowins.arrowktplayground.domain.data.RepositoryData
 import com.dobrowins.arrowktplayground.navigation.SCREEN_START
+import com.dobrowins.arrowktplayground.views.mapThrowableMessage
 import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
@@ -18,8 +19,12 @@ class ReposViewPresenter @Inject constructor(
     private val reposViewInteractor: ReposViewInteractor
 ) : BasePresenter<ReposView>() {
 
-    fun loadData(profileName: String): IO<List<RepoItem>> =
-        reposViewInteractor.fetchReposData(profileName).map(mapToItems)
+    fun loadData(profileName: String): Unit {
+		reposViewInteractor.fetchReposData(profileName).fold(
+			ifLeft = mapThrowableMessage andThen viewState::showSnackbar,
+			ifRight = mapToItems andThen viewState::showRepos
+		)
+	}
 
     fun onToolbarNavigationIconPressed() = router.navigateTo(SCREEN_START)
 

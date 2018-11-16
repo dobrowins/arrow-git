@@ -3,6 +3,8 @@ package com.dobrowins.arrowktplayground.domain
 import arrow.core.Either
 import arrow.core.Right
 import arrow.core.Try
+import arrow.core.filterOrElse
+import arrow.core.flatMap
 import arrow.core.left
 import arrow.core.right
 import arrow.core.rightIfNotNull
@@ -29,15 +31,12 @@ class RepoDetailInteractorImpl @Inject constructor(
 ) : RepoDetailInteractor {
 
 	override suspend fun getRepoData(repoId: String?): Either<Throwable, RepositoryData> =
-		Try { gitHubRepository.getRepositoryFromCache(repoId).await() }
-			.fold(
-				ifFailure = { Either.Left(it) },
-				ifSuccess = { repositoryData ->
-					repositoryData.toOption().fold(
-						ifEmpty = { Either.Left(IllegalArgumentException("can't process Repository data that is null")) },
-						ifSome = { nonNullData -> Either.right(nonNullData) }
-					)
-				}
-			)
+		Try {
+			gitHubRepository.getRepositoryFromCache(repoId).await()
+				?: throw IllegalArgumentException("cache is null")
+		}.fold(
+			ifFailure = { throwable -> Either.Left(throwable) },
+			ifSuccess = { nonNullData -> Either.Right(nonNullData) }
+		)
 
 }

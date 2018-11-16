@@ -18,80 +18,79 @@ import javax.inject.Inject
  * @author: Artem Dobrovinsky
  */
 interface ReposView : BaseView {
-    fun showRepos(repos: List<RepoItem>)
+	fun showRepos(repos: List<RepoItem>)
+	fun showSnackbar(message: String)
+	fun showErrorItem()
 }
 
 class ReposFragment : BaseFragment(), ReposView {
 
-    companion object {
-        fun getInstance(data: String): ReposFragment {
-            val fragment = ReposFragment()
-            val bundle = Bundle()
-            bundle.putString(KEY_PROFILE_NAME, data)
-            fragment.arguments = bundle
-            return fragment
-        }
-    }
+	companion object {
+		fun getInstance(data: String): ReposFragment {
+			val fragment = ReposFragment()
+			val bundle = Bundle()
+			bundle.putString(KEY_PROFILE_NAME, data)
+			fragment.arguments = bundle
+			return fragment
+		}
+	}
 
-    @Inject
-    @InjectPresenter
-    lateinit var presenter: ReposViewPresenter
+	@Inject
+	@InjectPresenter
+	lateinit var presenter: ReposViewPresenter
 
-    @ProvidePresenter
-    fun providePresenter() = presenter
+	@ProvidePresenter
+	fun providePresenter() = presenter
 
-    override val layoutId: Int = R.layout.fragment_repos
+	override val layoutId: Int = R.layout.fragment_repos
 
-    private lateinit var profileName: String
+	private lateinit var profileName: String
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        profileName = arguments?.getString(KEY_PROFILE_NAME).orEmpty()
-    }
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		profileName = arguments?.getString(KEY_PROFILE_NAME).orEmpty()
+	}
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initToolbar()
-        loadRepos()
-    }
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+		initToolbar()
+		loadRepos()
+	}
 
-    private fun initToolbar() {
-        tbFragmentRepos.apply {
-            title = profileName
-            setTitleTextColor(
-                ContextCompat.getColor(
-                    activity?.baseContext as Context,
-                    android.R.color.white
-                )
-            )
-            setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-            setNavigationOnClickListener { presenter.onToolbarNavigationIconPressed() }
-        }
-    }
+	override fun showSnackbar(message: String) = super.showSnackbar(rootFragmentRepos).invoke(message)
 
-    private fun loadRepos() {
-        presenter.loadData(profileName).unsafeRunAsync { either ->
-            either.fold(
-                ifLeft = { emptyList<RepoItem>() },
-                ifRight = { it }
-            ).let(::showRepos)
-        }
-    }
+	override fun showErrorItem() = TODO("show fullscreen error item")
 
-    override fun showRepos(repos: List<RepoItem>): Unit = runOnUiThread {
-        val reposAdapter = ReposAdapter(
-            repoOnClickFunc = {
-                // TODO: open repo detailed info
-            }
-        )
-        reposAdapter.add(repos)
-        rvReposFragment.run {
-            adapter = reposAdapter
-            setHasFixedSize(true)
-        }
-        // TODO: add animation appear from bottom upwards
-        TransitionManager.beginDelayedTransition(rootFragmentRepos)
-        rvReposFragment.visibility = View.VISIBLE
-    }
+	private fun initToolbar() {
+		tbFragmentRepos.apply {
+			title = profileName
+			setTitleTextColor(
+				ContextCompat.getColor(
+					activity?.baseContext as Context,
+					android.R.color.white
+				)
+			)
+			setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
+			setNavigationOnClickListener { presenter.onToolbarNavigationIconPressed() }
+		}
+	}
+
+	private fun loadRepos() = presenter.loadData(profileName)
+
+	override fun showRepos(repos: List<RepoItem>): Unit = runOnUiThread {
+		val reposAdapter = ReposAdapter(
+			repoOnClickFunc = {
+				// TODO: open repo detailed info
+			}
+		)
+		reposAdapter.add(repos)
+		rvReposFragment.run {
+			adapter = reposAdapter
+			setHasFixedSize(true)
+		}
+		// TODO: add animation appear from bottom upwards
+		TransitionManager.beginDelayedTransition(rootFragmentRepos)
+		rvReposFragment.visibility = View.VISIBLE
+	}
 
 }

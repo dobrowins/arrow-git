@@ -1,19 +1,23 @@
 package com.dobrowins.arrowktplayground.repository
 
 import arrow.Kind
+import arrow.core.Either
 import arrow.core.Try
+import arrow.core.andThen
+import arrow.core.fix
 import arrow.core.right
 import arrow.effects.IO
-import arrow.effects.async
 import arrow.effects.fix
-import arrow.effects.monadError
 import arrow.effects.typeclasses.Async
+import arrow.instances.`try`.monadError.monadError
 import arrow.syntax.function.forwardCompose
-import arrow.typeclasses.binding
+import arrow.typeclasses.MonadError
+import arrow.typeclasses.bindingCatch
 import com.dobrowins.arrowktplayground.domain.data.GitHubRepository
 import com.dobrowins.arrowktplayground.domain.data.RepositoryData
 import com.dobrowins.arrowktplayground.repository.api.GithubApi
 import com.dobrowins.arrowktplayground.repository.cache.GitHubPersistWorker
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -27,33 +31,14 @@ class GitHubRepositoryImpl @Inject constructor(
     private val gitHubPersistWorker: GitHubPersistWorker
 ) : GitHubRepository {
 
-    override fun loadRepositoriesById(profileName: String): IO<List<RepositoryData>> =
-        IO.monadError().binding {
-            runInAsyncContext(
-                λ = {
-                    githubApi.getUserRepos(profileName).execute().body() ?: emptyList()
-                },
-                onError = returnEmptyList,
-                onSuccess = cache forwardCompose map,
-                AC = IO.async()
-            ).bind()
-        }.fix()
+    override fun loadRepositoriesById(profileName: String): Either<Throwable, List<RepositoryData>> =
+        Try.just(githubApi.getUserRepos(profileName).execute().body()).fold(
+            ifFailure = { Either.Left(it) },
+            ifSuccess = cache andThen mapToEither
+        )
 
-    override fun getRepositoryFromCache(repositoryId: String): IO<RepositoryData?> =
-        IO.monadError().binding {
-            runInAsyncContext(
-                λ = {
-                    TODO()
-                },
-                onError = {
-                    TODO()
-                },
-                onSuccess = {
-                    TODO()
-                },
-                AC = IO.async()
-            ).bind()
-        }.fix()
+    override fun getRepositoryFromCache(repositoryId: String?): Deferred<RepositoryData?> =
+       TODO()
 
     private fun <F, A, B> runInAsyncContext(
         λ: () -> A,
@@ -73,14 +58,16 @@ class GitHubRepositoryImpl @Inject constructor(
         emptyList()
     }
 
-    private val cache: (List<RepositoryDataResponse?>) -> List<RepositoryDataResponse> =
+    private val cache: (List<RepositoryDataResponse?>?) -> List<RepositoryDataResponse> =
         { responseList ->
-            val filtered = responseList.filterNotNull()
-            gitHubPersistWorker.put(filtered)
-            filtered
+            responseList?.let { list ->
+                val filtered = list.filterNotNull()
+                gitHubPersistWorker.put(filtered)
+                filtered
+            } ?: emptyList()
         }
 
-    private val map: (List<RepositoryDataResponse>) -> List<RepositoryData> = { responseList ->
+    private val mapToEither: (List<RepositoryDataResponse>) -> Either<Nothing, List<RepositoryData>> = { responseList ->
         val mapped = responseList.map { repository ->
             RepositoryData(
                 id = repository.id?.toInt() ?: 0,
@@ -90,7 +77,7 @@ class GitHubRepositoryImpl @Inject constructor(
                 description = repository.description.orEmpty()
             )
         }
-        mapped
+        Either.Right(mapped)
     }
 
 }

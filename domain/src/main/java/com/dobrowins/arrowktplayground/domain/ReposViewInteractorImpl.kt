@@ -1,5 +1,6 @@
 package com.dobrowins.arrowktplayground.domain
 
+import arrow.core.Either
 import arrow.effects.IO
 import com.dobrowins.arrowktplayground.domain.data.GitHubRepository
 import com.dobrowins.arrowktplayground.domain.data.RepositoryData
@@ -12,7 +13,7 @@ class ReposViewInteractorImpl @Inject constructor(
     private val gitHubRepository: GitHubRepository
 ) : ReposViewInteractor {
 
-    override fun fetchReposData(profileName: String): IO<List<RepositoryData?>?> =
+    override fun fetchReposData(profileName: String): Either<Throwable, List<RepositoryData?>?> =
         gitHubRepository.loadRepositoriesById(profileName)
 
 }

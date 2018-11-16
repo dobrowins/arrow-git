@@ -10,10 +10,10 @@ import io.paperdb.Paper
  */
 abstract class PersistWorker {
 
-    protected fun <T : Any> put(key: String, value: T) =
+    protected suspend fun <T : Any> put(key: String, value: T) =
         put(key, value, null)
 
-    protected fun <T : Any> put(key: String, value: T, bookName: String?) {
+    protected suspend fun <T : Any> put(key: String, value: T, bookName: String?) {
         val putFunc = getBook(bookName) andThen putValueByKey(key, value)
         putFunc.invoke()
     }
