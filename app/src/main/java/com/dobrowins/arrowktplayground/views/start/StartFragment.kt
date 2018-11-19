@@ -46,6 +46,7 @@ class StartFragment : BaseFragment(), StartView {
 					IME_ACTION_DONE -> {
 						val profileName = textView.text.toString()
 						presenter.onEditTextDoneButtonClicked(profileName)
+						textView.text = ""
 						true
 					}
 					else -> false

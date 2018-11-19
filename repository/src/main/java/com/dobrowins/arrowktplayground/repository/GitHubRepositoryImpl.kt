@@ -5,11 +5,11 @@ import arrow.core.Try
 import arrow.core.right
 import arrow.effects.IO
 import arrow.effects.typeclasses.Async
+import com.dobrowins.arrowktplayground.domain.DispatchersProvider
 import com.dobrowins.arrowktplayground.domain.data.GitHubRepository
 import com.dobrowins.arrowktplayground.domain.data.RepositoryData
 import com.dobrowins.arrowktplayground.repository.api.GithubApi
 import com.dobrowins.arrowktplayground.repository.cache.GitHubPersistWorker
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,12 +19,14 @@ import javax.inject.Inject
  */
 class GitHubRepositoryImpl @Inject constructor(
 	private val githubApi: GithubApi,
-	private val gitHubPersistWorker: GitHubPersistWorker
+	private val gitHubPersistWorker: GitHubPersistWorker,
+	dispatchersProvider: DispatchersProvider
 ) : GitHubRepository {
 
+	private val ioScope = dispatchersProvider.io
 
 	override fun loadRepositoriesById(profileName: String): IO<List<RepositoryData?>?> =
-		IO.invoke(Dispatchers.IO) {
+		IO.invoke(ioScope) {
 			getUserReposUnsafe(profileName)
 				?.filterNotNull()
 				?.let(cache)
@@ -32,9 +34,7 @@ class GitHubRepositoryImpl @Inject constructor(
 		}
 
 	override fun getRepositoryFromCache(repositoryId: String?): IO<RepositoryData?> =
-		IO.invoke(Dispatchers.IO) {
-			gitHubPersistWorker.getRepositoryFromCache(repositoryId)
-		}
+		IO.invoke(ioScope) { gitHubPersistWorker.getRepositoryFromCache(repositoryId) }
 			.map(mapToRepositoryData)
 
 	private val getUserReposUnsafe: (String) -> List<RepositoryDataResponse?>? =
@@ -52,11 +52,14 @@ class GitHubRepositoryImpl @Inject constructor(
 	private val mapToRepositoryData: (RepositoryDataResponse?) -> RepositoryData? = { data ->
 		if (data == null) data
 		else RepositoryData(
-			id = data.id?.toInt() ?: 0,
-			name = data.name.orEmpty(),
-			fullName = data.full_name.orEmpty(),
-			htmlUrl = data.html_url.orEmpty(),
-			description = data.description.orEmpty()
+			id = data.id,
+			name = data.name,
+			fullName = data.full_name,
+			htmlUrl = data.html_url,
+			description = data.description,
+			language = data.language,
+			forkedCount = data.forks,
+			starredCount = data.stargazers_count
 		)
 	}
 

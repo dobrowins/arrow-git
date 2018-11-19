@@ -1,3 +1,5 @@
 <resources>
   <string name="app_name">ArrowKtPlayground</string>
+  <string name="format_string_item_forked_count">Forked: %s</string>
+  <string name="format_string_item_starred_count">Starred: %s</string>
 </resources>

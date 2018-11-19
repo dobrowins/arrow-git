@@ -1,8 +1,6 @@
 package com.dobrowins.arrowktplayground.repository.api
 
-import arrow.effects.DeferredK
 import com.dobrowins.arrowktplayground.repository.RepositoryDataResponse
-import kotlinx.coroutines.Deferred
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

@@ -22,6 +22,9 @@ class ReposItemVH(itemView: ViewGroup, private val λ: (String) -> Unit) :
         item as RepoItem
         item.fullName.let(tvRepoItemTitle::setText)
         item.htmlUrl.let(tvRepoItemUrl::setText)
+		item.language.let(tvRepoItemLanguage::setText)
+//        item.forkedText.let(tvRepoItemForkedCount::setText)
+//        item.starredText.let(tvRepoItemStarredCount::setText)
         rootRepoItem.setOnClickListener { λ(item.fullName) }
         return@with
     }

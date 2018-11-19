@@ -1,6 +1,7 @@
 package com.dobrowins.arrowktplayground.views.start
 
 import arrow.core.Either
+import arrow.core.andThen
 import arrow.core.flatMap
 import arrow.instances.either.monad.flatMap
 import arrow.syntax.function.forwardCompose
@@ -27,7 +28,7 @@ class StartViewPresenter @Inject constructor(
             false -> Either.Right(profileName)
         }
         isEmpty.fold(
-            ifLeft = mapThrowableMessage forwardCompose viewState::showSnackbar,
+			ifLeft = mapThrowableMessage andThen viewState::showSnackbar,
             ifRight = viewState::startReposFragment
         )
     }

@@ -1,5 +1,6 @@
 package com.dobrowins.arrowktplayground.di.providers
 
+import com.dobrowins.arrowktplayground.domain.DispatchersProvider
 import com.dobrowins.arrowktplayground.repository.GitHubRepositoryImpl
 import com.dobrowins.arrowktplayground.repository.api.GithubApi
 import com.dobrowins.arrowktplayground.repository.cache.GitHubPersistWorker
@@ -12,10 +13,11 @@ import javax.inject.Provider
 class GitHubRepositoryImplProvider
 @Inject constructor(
     private val githubApi: GithubApi,
-    private val gitHubPersistWorker: GitHubPersistWorker
+	private val gitHubPersistWorker: GitHubPersistWorker,
+	private val dispatchersProvider: DispatchersProvider
 ) : Provider<GitHubRepositoryImpl> {
 
     override fun get(): GitHubRepositoryImpl =
-        GitHubRepositoryImpl(githubApi, gitHubPersistWorker)
+		GitHubRepositoryImpl(githubApi, gitHubPersistWorker, dispatchersProvider)
 
 }

@@ -7,11 +7,14 @@ import com.dobrowins.arrowktplayground.base.adapters.HolderType
  */
 
 data class RepoItem(
-    val id: Int,
+    val id: String,
     val name: String,
     val fullName: String,
     val htmlUrl: String,
-    val description: String
+    val description: String,
+    val language: String,
+    val forkedText: String,
+    val starredText: String
 ) : HolderType {
     override fun type(): Int = HolderType.REPO
 }

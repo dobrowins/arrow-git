@@ -21,4 +21,5 @@ class GitHubPersistWorker @Inject constructor() : PersistWorker() {
 	private val getAllRepositoriesFromCacheOrNull: () -> List<RepositoryDataResponse?>? = {
 		get<List<RepositoryDataResponse?>?>(keyReposCache, null, bookName)
 	}
+
 }

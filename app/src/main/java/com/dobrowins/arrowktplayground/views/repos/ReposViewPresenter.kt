@@ -1,9 +1,11 @@
 package com.dobrowins.arrowktplayground.views.repos
 
+import android.content.Context
 import arrow.core.Option
 import arrow.core.toOption
 import arrow.syntax.function.andThen
 import com.arellomobile.mvp.InjectViewState
+import com.dobrowins.arrowktplayground.R
 import com.dobrowins.arrowktplayground.domain.DispatchersProvider
 import com.dobrowins.arrowktplayground.base.BasePresenter
 import com.dobrowins.arrowktplayground.domain.ReposViewInteractor
@@ -26,7 +28,8 @@ import javax.inject.Inject
 class ReposViewPresenter @Inject constructor(
 	private val router: Router,
 	private val reposViewInteractor: ReposViewInteractor,
-	private val dispatchersProvider: DispatchersProvider
+	dispatchersProvider: DispatchersProvider,
+	private val context: Context
 ) : BasePresenter<ReposView>() {
 
 	private val fetchReposJob = Job()
@@ -34,10 +37,7 @@ class ReposViewPresenter @Inject constructor(
 
 	fun loadData(profileName: String) {
 		viewScope.launch {
-			val reposIO = withContext(dispatchersProvider.io) {
-				reposViewInteractor.fetchReposData(profileName)
-			}
-			reposIO.unsafeRunAsync { repos ->
+			reposViewInteractor.fetchReposData(profileName).unsafeRunAsync { repos ->
 				repos.fold(
 					ifLeft = cancelJob(fetchReposJob) andThen mapThrowableMessage andThen viewState::showSnackbar,
 					ifRight = mapToOption andThen showItemsOrErrorIfNull
@@ -63,11 +63,20 @@ class ReposViewPresenter @Inject constructor(
 	private val mapToItems: (List<RepositoryData>) -> List<RepoItem> = { responseRepos ->
 		responseRepos.map { data ->
 			RepoItem(
-				id = data.id,
-				name = data.name,
-				fullName = data.fullName,
-				htmlUrl = data.htmlUrl,
-				description = data.description
+				id = data.id ?: "unknown id",
+				name = data.name ?: "unknown name",
+				fullName = data.fullName ?: "unknown full name",
+				htmlUrl = data.htmlUrl ?: "unknown url",
+				description = data.description.orEmpty(),
+				language = data.language.orEmpty(),
+				forkedText = String.format(
+					context.getString(R.string.format_string_item_forked_count),
+					data.forkedCount ?: 0
+				),
+				starredText = String.format(
+					context.getString(R.string.format_string_item_starred_count),
+					data.starredCount ?: 0
+				)
 			)
 		}
 	}

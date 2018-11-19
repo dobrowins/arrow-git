@@ -32,10 +32,7 @@ class RepoDetailPresenter @Inject constructor(
 
 	fun fetchRepoData(repoName: String) {
 		uiScope.launch {
-			val getRepoIO = withContext(dispatchersProvider.io) {
-				repoDetailInteractor.getRepoData(repoName)
-			}
-			getRepoIO.unsafeRunAsync { either ->
+			repoDetailInteractor.getRepoData(repoName).unsafeRunAsync { either ->
 				either.fold(
 					ifLeft = cancelJob(fetchReposJob) andThen composeMessageAndShowSnackbar,
 					ifRight = mapToOption andThen showItemsOrErrorIfNull
