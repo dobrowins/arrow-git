@@ -2,16 +2,14 @@ package com.dobrowins.arrowktplayground.repository
 
 import arrow.Kind
 import arrow.core.Try
-import arrow.core.fix
 import arrow.core.right
 import arrow.effects.IO
 import arrow.effects.typeclasses.Async
-import arrow.instances.`try`.monadError.monadError
-import arrow.typeclasses.bindingCatch
 import com.dobrowins.arrowktplayground.domain.data.GitHubRepository
 import com.dobrowins.arrowktplayground.domain.data.RepositoryData
 import com.dobrowins.arrowktplayground.repository.api.GithubApi
 import com.dobrowins.arrowktplayground.repository.cache.GitHubPersistWorker
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,22 +22,19 @@ class GitHubRepositoryImpl @Inject constructor(
 	private val gitHubPersistWorker: GitHubPersistWorker
 ) : GitHubRepository {
 
-	override fun loadRepositoriesById(profileName: String): IO<List<RepositoryData>> =
-		Try.monadError().bindingCatch {
+
+	override fun loadRepositoriesById(profileName: String): IO<List<RepositoryData?>?> =
+		IO.invoke(Dispatchers.IO) {
 			getUserReposUnsafe(profileName)
 				?.filterNotNull()
 				?.let(cache)
 				?.map(mapToRepositoryData)
-				?: emptyList()
 		}
-			.fix()
-			.fold(
-				ifFailure = { t -> IO.raiseError(t) },
-				ifSuccess = { list -> IO.just(list) }
-			)
 
-	override fun getRepositoryFromCache(repositoryId: String?): IO<RepositoryData> =
-		IO { gitHubPersistWorker.getRepositoryFromCache(repositoryId) }
+	override fun getRepositoryFromCache(repositoryId: String?): IO<RepositoryData?> =
+		IO.invoke(Dispatchers.IO) {
+			gitHubPersistWorker.getRepositoryFromCache(repositoryId)
+		}
 			.map(mapToRepositoryData)
 
 	private val getUserReposUnsafe: (String) -> List<RepositoryDataResponse?>? =
@@ -54,13 +49,14 @@ class GitHubRepositoryImpl @Inject constructor(
 			} ?: emptyList()
 		}
 
-	private val mapToRepositoryData: (RepositoryDataResponse?) -> RepositoryData = { data ->
-		RepositoryData(
-			id = data?.id?.toInt() ?: 0,
-			name = data?.name.orEmpty(),
-			fullName = data?.full_name.orEmpty(),
-			htmlUrl = data?.html_url.orEmpty(),
-			description = data?.description.orEmpty()
+	private val mapToRepositoryData: (RepositoryDataResponse?) -> RepositoryData? = { data ->
+		if (data == null) data
+		else RepositoryData(
+			id = data.id?.toInt() ?: 0,
+			name = data.name.orEmpty(),
+			fullName = data.full_name.orEmpty(),
+			htmlUrl = data.html_url.orEmpty(),
+			description = data.description.orEmpty()
 		)
 	}
 

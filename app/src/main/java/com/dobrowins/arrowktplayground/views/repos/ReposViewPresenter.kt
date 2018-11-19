@@ -1,8 +1,10 @@
 package com.dobrowins.arrowktplayground.views.repos
 
+import arrow.core.Option
+import arrow.core.toOption
 import arrow.syntax.function.andThen
 import com.arellomobile.mvp.InjectViewState
-import com.dobrowins.arrowktplayground.DispatchersProvider
+import com.dobrowins.arrowktplayground.domain.DispatchersProvider
 import com.dobrowins.arrowktplayground.base.BasePresenter
 import com.dobrowins.arrowktplayground.domain.ReposViewInteractor
 import com.dobrowins.arrowktplayground.domain.data.RepositoryData
@@ -32,11 +34,13 @@ class ReposViewPresenter @Inject constructor(
 
 	fun loadData(profileName: String) {
 		viewScope.launch {
-			val reposIO = withContext(dispatchersProvider.io) { reposViewInteractor.fetchReposData(profileName) }
+			val reposIO = withContext(dispatchersProvider.io) {
+				reposViewInteractor.fetchReposData(profileName)
+			}
 			reposIO.unsafeRunAsync { repos ->
 				repos.fold(
 					ifLeft = cancelJob(fetchReposJob) andThen mapThrowableMessage andThen viewState::showSnackbar,
-					ifRight = mapToItems andThen viewState::showRepos
+					ifRight = mapToOption andThen showItemsOrErrorIfNull
 				)
 			}
 		}
@@ -45,6 +49,16 @@ class ReposViewPresenter @Inject constructor(
 	fun onToolbarNavigationIconPressed() = router.navigateTo(SCREEN_START)
 
 	fun onRepoItemClicked(repoName: String) = router.navigateTo(SCREEN_REPO_DETAIL, repoName)
+
+	private val mapToOption: (List<RepositoryData?>?) -> Option<List<RepositoryData>> =
+		{ it?.filterNotNull().toOption() }
+
+	private val showItemsOrErrorIfNull: (Option<List<RepositoryData>>) -> Unit = {
+		it.fold(
+			ifEmpty = { viewState.showSnackbar("No items to display") },
+			ifSome = mapToItems andThen viewState::showRepos
+		)
+	}
 
 	private val mapToItems: (List<RepositoryData>) -> List<RepoItem> = { responseRepos ->
 		responseRepos.map { data ->

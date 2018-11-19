@@ -1,5 +1,6 @@
-package com.dobrowins.arrowktplayground
+package com.dobrowins.arrowktplayground.di.providers
 
+import com.dobrowins.arrowktplayground.domain.DispatchersProvider
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
@@ -7,12 +8,6 @@ import kotlin.coroutines.CoroutineContext
 /**
  * @author: Artem Dobrovinsky
  */
-interface DispatchersProvider {
-	val main: CoroutineContext
-	val io: CoroutineContext
-	val default: CoroutineContext
-}
-
 class DispatchersProviderImpl @Inject constructor(): DispatchersProvider {
 
 	override val main: CoroutineContext
