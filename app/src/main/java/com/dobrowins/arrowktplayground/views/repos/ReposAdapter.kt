@@ -7,7 +7,7 @@ import com.dobrowins.arrowktplayground.base.adapters.HolderType
  * @author Artem Dobrovinskiy
  */
 class ReposAdapter(
-    repoOnClickFunc: () -> Unit
+    repoOnClickFunc: (String) -> Unit
 ) : BaseAdapter() {
 
     init {

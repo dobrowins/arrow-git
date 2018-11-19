@@ -8,8 +8,10 @@ import com.dobrowins.arrowktplayground.R.layout
 import com.dobrowins.arrowktplayground.base.BaseFragment
 import com.dobrowins.arrowktplayground.di.Scopes
 import com.dobrowins.arrowktplayground.navigation.SCREEN_REPOS
+import com.dobrowins.arrowktplayground.navigation.SCREEN_REPO_DETAIL
 import com.dobrowins.arrowktplayground.navigation.SCREEN_START
 import com.dobrowins.arrowktplayground.toast
+import com.dobrowins.arrowktplayground.views.repodetail.RepoDetailFragment
 import com.dobrowins.arrowktplayground.views.repos.ReposFragment
 import com.dobrowins.arrowktplayground.views.start.StartFragment
 import ru.terrakok.cicerone.NavigatorHolder
@@ -33,6 +35,7 @@ class MainActivity : MvpAppCompatActivity() {
                 when (screenKey) {
                     SCREEN_START -> StartFragment()
                     SCREEN_REPOS -> ReposFragment.getInstance(data.toString())
+                    SCREEN_REPO_DETAIL -> RepoDetailFragment.getInstance(data.toString())
                     else -> throw IllegalArgumentException("$screenKey is unknown fragment key!")
                 }
 

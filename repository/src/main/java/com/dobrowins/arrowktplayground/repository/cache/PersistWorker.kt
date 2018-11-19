@@ -10,25 +10,25 @@ import io.paperdb.Paper
  */
 abstract class PersistWorker {
 
-    protected suspend fun <T : Any> put(key: String, value: T) =
+    protected fun <T : Any> put(key: String, value: T) =
         put(key, value, null)
 
-    protected suspend fun <T : Any> put(key: String, value: T, bookName: String?) {
+    protected fun <T : Any> put(key: String, value: T, bookName: String?) {
         val putFunc = getBook(bookName) andThen putValueByKey(key, value)
         putFunc.invoke()
     }
 
-    protected operator fun <T : Any> get(key: String, defaultValue: T): T =
+    protected fun <T : Any?> get(key: String, defaultValue: T): T =
         get(key, defaultValue, null)
 
-    protected operator fun <T : Any> get(key: String, defaultValue: T, bookName: String?): T =
+    protected fun <T : Any?> get(key: String, defaultValue: T, bookName: String?): T =
         Try.invoke(getBook(bookName) andThen readByKey(key, defaultValue)).fold(
-            {
+            ifFailure = {
                 val deletionFunc = getBook(bookName) andThen deleteByKey(key)
                 deletionFunc.invoke()
                 defaultValue
             },
-            { it }
+            ifSuccess = { it }
         )
 
     protected fun deleteByKey(key: String, bookName: String?): () -> Unit =

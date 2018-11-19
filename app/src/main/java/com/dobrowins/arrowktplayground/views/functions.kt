@@ -1,6 +1,7 @@
 package com.dobrowins.arrowktplayground.views
 
 import arrow.core.Either
+import kotlinx.coroutines.Job
 
 /**
  * @author Artem Dobrovinskiy
@@ -10,6 +11,11 @@ val isEmpty: (String?) -> Either<Throwable, String> = { s ->
         true -> Either.Left(IllegalArgumentException("parameter can't be empty"))
         false -> Either.Right(s)
     }
+}
+
+fun cancelJob(job: Job): (Throwable) -> Throwable = {
+    job.cancel()
+    it
 }
 
 val mapThrowableMessage: (Throwable) -> String = { it.message.orEmpty() }

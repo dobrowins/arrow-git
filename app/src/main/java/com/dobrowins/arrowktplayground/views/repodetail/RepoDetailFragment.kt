@@ -3,16 +3,17 @@ package com.dobrowins.arrowktplayground.views.repodetail
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.view.View
-import arrow.syntax.function.forwardCompose
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.dobrowins.arrowktplayground.R
 import com.dobrowins.arrowktplayground.base.BaseFragment
 import com.dobrowins.arrowktplayground.base.BaseView
 import com.dobrowins.arrowktplayground.domain.data.RepositoryData
-import com.dobrowins.arrowktplayground.views.KEY_REPO_ID
-import com.dobrowins.arrowktplayground.views.mapThrowableMessage
-import kotlinx.android.synthetic.main.fragment_repo_detail.*
+import com.dobrowins.arrowktplayground.views.KEY_REPO_NAME
+import kotlinx.android.synthetic.main.fragment_repo_detail.rootFragmentRepoDetail
+import kotlinx.android.synthetic.main.fragment_repo_detail.tbFragmentRepoDetail
+import kotlinx.android.synthetic.main.fragment_repo_detail.tvFragmentRepoDetailDescription
+import kotlinx.android.synthetic.main.fragment_repo_detail.tvFragmentRepoDetailTitle
 import javax.inject.Inject
 
 /**
@@ -20,7 +21,7 @@ import javax.inject.Inject
  */
 interface RepoDetailView : BaseView {
 	fun initView(repoData: RepositoryData)
-	fun displayError(t: Throwable)
+	fun showSnackbar(message: String)
 }
 
 class RepoDetailFragment : BaseFragment(), RepoDetailView {
@@ -29,7 +30,7 @@ class RepoDetailFragment : BaseFragment(), RepoDetailView {
 		fun getInstance(repoId: String): RepoDetailFragment {
 			val fragment = RepoDetailFragment()
 			val bundle = Bundle()
-			bundle.putString(KEY_REPO_ID, repoId)
+			bundle.putString(KEY_REPO_NAME, repoId)
 			fragment.arguments = bundle
 			return fragment
 		}
@@ -44,17 +45,18 @@ class RepoDetailFragment : BaseFragment(), RepoDetailView {
 	@ProvidePresenter
 	fun providePresenter() = presenter
 
-	private lateinit var repoId: String
+	private lateinit var repoName: String
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		repoId = arguments?.getString(KEY_REPO_ID).orEmpty()
+		repoName = arguments?.getString(KEY_REPO_NAME).orEmpty()
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		initToolbar()
-		presenter.fetchRepoData(repoId)
+		presenter.attachView(this)
+		presenter.fetchRepoData(repoName)
 	}
 
 	override fun initView(repoData: RepositoryData) = runOnUiThread {
@@ -64,8 +66,8 @@ class RepoDetailFragment : BaseFragment(), RepoDetailView {
 		description.let(tvFragmentRepoDetailDescription::setText)
 	}
 
-	override fun displayError(t: Throwable) = runOnUiThread {
-		mapThrowableMessage forwardCompose showSnackbar(rootFragmentRepoDetail)
+	override fun showSnackbar(message: String) {
+		super.showSnackbar(rootFragmentRepoDetail)(message)
 	}
 
 	private fun initToolbar() =

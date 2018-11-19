@@ -46,6 +46,17 @@ android {
     }
 }
 
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == "com.android.support") {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion "28.+"
+            }
+        }
+    }
+}
+
 dependencies {
     implementation(
             fileTree(dir: 'libs', include: ['*.jar']),
@@ -55,7 +66,7 @@ dependencies {
     )
 
     kapt(
-            deps.arrow.annotations,
+            //deps.arrow.annotations,
             deps.moxy.compiler,
             deps.toothpick.compiler
     )

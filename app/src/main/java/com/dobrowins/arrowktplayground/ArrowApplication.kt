@@ -59,7 +59,7 @@ class ArrowApplication : Application() {
                     RepositoriesModule(),
                     ApiModule()
 				)
-				Toothpick.inject(this@ArrowApplication, appScope)
+				Toothpick.inject(this, appScope)
 			}
 
 }

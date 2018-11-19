@@ -9,20 +9,15 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.dobrowins.arrowktplayground.R
 import com.dobrowins.arrowktplayground.base.BaseFragment
-import com.dobrowins.arrowktplayground.base.BaseView
 import com.dobrowins.arrowktplayground.views.KEY_PROFILE_NAME
-import kotlinx.android.synthetic.main.fragment_repos.*
+import kotlinx.android.synthetic.main.fragment_repos.rootFragmentRepos
+import kotlinx.android.synthetic.main.fragment_repos.rvReposFragment
+import kotlinx.android.synthetic.main.fragment_repos.tbFragmentRepos
 import javax.inject.Inject
 
 /**
  * @author: Artem Dobrovinsky
  */
-interface ReposView : BaseView {
-	fun showRepos(repos: List<RepoItem>)
-	fun showSnackbar(message: String)
-	fun showErrorItem()
-}
-
 class ReposFragment : BaseFragment(), ReposView {
 
 	companion object {
@@ -53,11 +48,12 @@ class ReposFragment : BaseFragment(), ReposView {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+		presenter.attachView(this)
 		initToolbar()
 		loadRepos()
 	}
 
-	override fun showSnackbar(message: String) = super.showSnackbar(rootFragmentRepos).invoke(message)
+	override fun showSnackbar(message: String) = showSnackbar(rootFragmentRepos)(message)
 
 	override fun showErrorItem() = TODO("show fullscreen error item")
 
@@ -79,9 +75,7 @@ class ReposFragment : BaseFragment(), ReposView {
 
 	override fun showRepos(repos: List<RepoItem>): Unit = runOnUiThread {
 		val reposAdapter = ReposAdapter(
-			repoOnClickFunc = {
-				// TODO: open repo detailed info
-			}
+			repoOnClickFunc = presenter::onRepoItemClicked
 		)
 		reposAdapter.add(repos)
 		rvReposFragment.run {

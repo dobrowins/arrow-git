@@ -6,8 +6,4 @@ import com.arellomobile.mvp.MvpView
 /**
  * @author Artem Dobrovinskiy
  */
-abstract class BasePresenter<V : MvpView> : MvpPresenter<V>() {
-
-
-
-}
+abstract class BasePresenter<V : MvpView> : MvpPresenter<V>() 
