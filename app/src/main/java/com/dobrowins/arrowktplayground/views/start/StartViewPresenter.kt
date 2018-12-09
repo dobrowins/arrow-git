@@ -18,7 +18,7 @@ class StartViewPresenter @Inject constructor(
 ) : BasePresenter<StartView>() {
 
     fun onEditTextDoneButtonClicked(profileName: String) =
-        validateString(profileName, String::isEmpty).fold(
+        validateString(profileName, String::isNotEmpty).fold(
             fe = mapThrowableMessage forwardCompose viewState::showSnackbar,
             fa = viewState::startReposFragment
         )

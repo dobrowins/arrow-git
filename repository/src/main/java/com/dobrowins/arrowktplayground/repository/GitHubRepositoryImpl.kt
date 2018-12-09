@@ -43,18 +43,4 @@ class GitHubRepositoryImpl @Inject constructor(
             } ?: emptyList()
         }
 
-    private val mapToRepositoryData: (RepositoryDataResponse?) -> RepositoryData? = { data ->
-        if (data == null) data
-        else RepositoryData(
-            id = data.id,
-            name = data.name,
-            fullName = data.full_name,
-            htmlUrl = data.html_url,
-            description = data.description,
-            language = data.language,
-            forkedCount = data.forks,
-            starredCount = data.stargazers_count
-        )
-    }
-
 }

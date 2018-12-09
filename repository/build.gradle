@@ -38,6 +38,8 @@ dependencies {
     )
 
     testImplementation(
+            deps.mockito.mockito,
+            deps.mockito.mockito-kotlin,
             deps.kotlin.test.jdk,
             deps.junit,
     )
