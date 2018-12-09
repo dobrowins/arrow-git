@@ -34,7 +34,7 @@ class ReposViewPresenter @Inject constructor(
         launch {
             reposViewInteractor.fetchReposData(profileName).unsafeRunAsync {
                 it.fold(
-                    ifLeft = cancelJob(fetchReposJob) forwardCompose mapThrowableMessage forwardCompose viewState::showSnackbar,
+                    ifLeft = cancelJob(fetchReposJob) forwardCompose displayErrorMessage,
                     ifRight = mapToOption forwardCompose showItemsOrErrorIfNull
                 )
             }
@@ -44,6 +44,8 @@ class ReposViewPresenter @Inject constructor(
     fun onToolbarNavigationIconPressed() = router.navigateTo(SCREEN_START)
 
     fun onRepoItemClicked(repoName: String) = router.navigateTo(SCREEN_REPO_DETAIL, repoName)
+
+    private val displayErrorMessage = mapThrowableMessage forwardCompose viewState::showSnackbar
 
     private val mapToOption: (List<RepositoryData?>?) -> Option<List<RepositoryData>> =
         { it?.filterNotNull().toOption() }
