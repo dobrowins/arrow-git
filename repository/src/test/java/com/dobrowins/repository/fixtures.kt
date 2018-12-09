@@ -11,4 +11,6 @@ object GithubApiFixture {
     val repositoryDataResponseList: Call<List<RepositoryDataResponse?>>
         get() = TODO()
 
+    val repositoryDataResponse: RepositoryDataResponse
+        get() = TODO()
 }

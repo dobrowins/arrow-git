@@ -11,7 +11,9 @@ class GitHubPersistWorker @Inject constructor() : PersistWorker() {
 	private val bookName = "github response cache"
 	private val keyReposCache = "github response repos cache"
 
-	fun put(repos: List<RepositoryDataResponse>) = put(keyReposCache, repos, bookName)
+    // TODO: if cache is present -> delete!
+    fun put(repos: List<RepositoryDataResponse>) =
+        put(keyReposCache, repos, bookName)
 
 	fun getRepositoryFromCache(repositoryName: String?): RepositoryDataResponse? =
 		getAllRepositoriesFromCacheOrNull()

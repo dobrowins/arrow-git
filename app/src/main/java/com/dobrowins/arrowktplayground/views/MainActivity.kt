@@ -51,7 +51,9 @@ class MainActivity : MvpAppCompatActivity() {
         navigator.applyCommands(arrayOf(defaultCommand))
     }
 
-    private val restoreState: (Bundle) -> Unit = {}
+    private val restoreState: (Bundle) -> Unit = {
+        // TODO: restore state
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         inject()
