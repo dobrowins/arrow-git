@@ -10,9 +10,7 @@ import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.dobrowins.arrowktplayground.R
 import com.dobrowins.arrowktplayground.base.BaseFragment
 import com.dobrowins.arrowktplayground.views.KEY_PROFILE_NAME
-import kotlinx.android.synthetic.main.fragment_repos.rootFragmentRepos
-import kotlinx.android.synthetic.main.fragment_repos.rvReposFragment
-import kotlinx.android.synthetic.main.fragment_repos.tbFragmentRepos
+import kotlinx.android.synthetic.main.fragment_repos.*
 import javax.inject.Inject
 
 /**
@@ -53,7 +51,7 @@ class ReposFragment : BaseFragment(), ReposView {
 		loadRepos()
 	}
 
-	override fun showSnackbar(message: String) = showSnackbar(rootFragmentRepos)(message)
+    override fun showSnackbar(message: String) = showSnackbar(rootFragmentRepos, message)
 
 	override fun showErrorItem() = TODO("show fullscreen error item")
 

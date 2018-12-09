@@ -3,11 +3,11 @@ package com.dobrowins.arrowktplayground.views.repos
 import android.content.Context
 import arrow.core.Option
 import arrow.core.toOption
-import arrow.syntax.function.andThen
+import arrow.syntax.function.forwardCompose
 import com.arellomobile.mvp.InjectViewState
 import com.dobrowins.arrowktplayground.R
-import com.dobrowins.arrowktplayground.domain.DispatchersProvider
 import com.dobrowins.arrowktplayground.base.BasePresenter
+import com.dobrowins.arrowktplayground.domain.DispatchersProvider
 import com.dobrowins.arrowktplayground.domain.ReposViewInteractor
 import com.dobrowins.arrowktplayground.domain.data.RepositoryData
 import com.dobrowins.arrowktplayground.navigation.SCREEN_REPO_DETAIL
@@ -17,7 +17,6 @@ import com.dobrowins.arrowktplayground.views.mapThrowableMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
@@ -39,8 +38,8 @@ class ReposViewPresenter @Inject constructor(
 		viewScope.launch {
 			reposViewInteractor.fetchReposData(profileName).unsafeRunAsync { repos ->
 				repos.fold(
-					ifLeft = cancelJob(fetchReposJob) andThen mapThrowableMessage andThen viewState::showSnackbar,
-					ifRight = mapToOption andThen showItemsOrErrorIfNull
+                    ifLeft = cancelJob(fetchReposJob) forwardCompose mapThrowableMessage forwardCompose viewState::showSnackbar,
+                    ifRight = mapToOption forwardCompose showItemsOrErrorIfNull
 				)
 			}
 		}
@@ -56,7 +55,7 @@ class ReposViewPresenter @Inject constructor(
 	private val showItemsOrErrorIfNull: (Option<List<RepositoryData>>) -> Unit = {
 		it.fold(
 			ifEmpty = { viewState.showSnackbar("No items to display") },
-			ifSome = mapToItems andThen viewState::showRepos
+            ifSome = mapToItems forwardCompose viewState::showRepos
 		)
 	}
 

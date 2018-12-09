@@ -10,10 +10,7 @@ import com.dobrowins.arrowktplayground.base.BaseFragment
 import com.dobrowins.arrowktplayground.base.BaseView
 import com.dobrowins.arrowktplayground.domain.data.RepositoryData
 import com.dobrowins.arrowktplayground.views.KEY_REPO_NAME
-import kotlinx.android.synthetic.main.fragment_repo_detail.rootFragmentRepoDetail
-import kotlinx.android.synthetic.main.fragment_repo_detail.tbFragmentRepoDetail
-import kotlinx.android.synthetic.main.fragment_repo_detail.tvFragmentRepoDetailDescription
-import kotlinx.android.synthetic.main.fragment_repo_detail.tvFragmentRepoDetailTitle
+import kotlinx.android.synthetic.main.fragment_repo_detail.*
 import javax.inject.Inject
 
 /**
@@ -66,9 +63,8 @@ class RepoDetailFragment : BaseFragment(), RepoDetailView {
 		description.let(tvFragmentRepoDetailDescription::setText)
 	}
 
-	override fun showSnackbar(message: String) {
-		super.showSnackbar(rootFragmentRepoDetail)(message)
-	}
+    override fun showSnackbar(message: String) =
+        super.showSnackbar(rootFragmentRepoDetail, message)
 
 	private fun initToolbar() =
 		tbFragmentRepoDetail.run {

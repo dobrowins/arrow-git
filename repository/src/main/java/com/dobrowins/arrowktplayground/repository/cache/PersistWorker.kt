@@ -1,7 +1,7 @@
 package com.dobrowins.arrowktplayground.repository.cache
 
 import arrow.core.Try
-import arrow.syntax.function.andThen
+import arrow.syntax.function.forwardCompose
 import io.paperdb.Book
 import io.paperdb.Paper
 
@@ -14,7 +14,7 @@ abstract class PersistWorker {
         put(key, value, null)
 
     protected fun <T : Any> put(key: String, value: T, bookName: String?) {
-        val putFunc = getBook(bookName) andThen putValueByKey(key, value)
+        val putFunc = getBook(bookName) forwardCompose putValueByKey(key, value)
         putFunc.invoke()
     }
 
@@ -22,9 +22,9 @@ abstract class PersistWorker {
         get(key, defaultValue, null)
 
     protected fun <T : Any?> get(key: String, defaultValue: T, bookName: String?): T =
-        Try.invoke(getBook(bookName) andThen readByKey(key, defaultValue)).fold(
+        Try.invoke(getBook(bookName) forwardCompose readByKey(key, defaultValue)).fold(
             ifFailure = {
-                val deletionFunc = getBook(bookName) andThen deleteByKey(key)
+                val deletionFunc = getBook(bookName) forwardCompose deleteByKey(key)
                 deletionFunc.invoke()
                 defaultValue
             },
@@ -32,11 +32,11 @@ abstract class PersistWorker {
         )
 
     protected fun deleteByKey(key: String, bookName: String?): () -> Unit =
-        getBook(bookName) andThen delete(key)
+        getBook(bookName) forwardCompose delete(key)
 
     protected fun deleteBook(bookName: String?) {
         bookName?.let {
-            val deletionFunc = getBook(bookName) andThen deleteAll
+            val deletionFunc = getBook(bookName) forwardCompose deleteAll
             deletionFunc.invoke()
         }
     }

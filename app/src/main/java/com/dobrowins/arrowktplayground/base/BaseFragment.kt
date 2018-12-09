@@ -35,9 +35,9 @@ abstract class BaseFragment : Fragment() {
     ): View? =
         inflater.inflate(layoutId, container, false)
 
-    fun showSnackbar(root: View): (String) -> Unit = { text ->
+    val showSnackbar: (View, String) -> Unit = { view, text ->
         runOnUiThread {
-            Snackbar.make(root, text, Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(view, text, Snackbar.LENGTH_SHORT).show()
         }
     }
 

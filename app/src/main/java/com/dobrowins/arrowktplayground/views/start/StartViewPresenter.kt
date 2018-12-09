@@ -1,16 +1,11 @@
 package com.dobrowins.arrowktplayground.views.start
 
-import arrow.core.Either
-import arrow.core.andThen
-import arrow.core.flatMap
-import arrow.instances.either.monad.flatMap
 import arrow.syntax.function.forwardCompose
 import com.arellomobile.mvp.InjectViewState
-import com.dobrowins.arrowktplayground.R.id.rootStartFragment
 import com.dobrowins.arrowktplayground.base.BasePresenter
 import com.dobrowins.arrowktplayground.navigation.SCREEN_REPOS
 import com.dobrowins.arrowktplayground.views.mapThrowableMessage
-import kotlinx.android.synthetic.main.fragment_start.rootStartFragment
+import com.dobrowins.arrowktplayground.views.validateString
 import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
@@ -22,19 +17,14 @@ class StartViewPresenter @Inject constructor(
     private val router: Router
 ) : BasePresenter<StartView>() {
 
-    fun onEditTextDoneButtonClicked(profileName: String) {
-        val isEmpty = when (profileName.isEmpty()) {
-            true -> Either.Left(IllegalArgumentException("can't load repo without profile name!"))
-            false -> Either.Right(profileName)
-        }
-        isEmpty.fold(
-			ifLeft = mapThrowableMessage andThen viewState::showSnackbar,
-            ifRight = viewState::startReposFragment
+    fun onEditTextDoneButtonClicked(profileName: String) =
+        validateString(profileName, String::isEmpty).fold(
+            fe = mapThrowableMessage forwardCompose viewState::showSnackbar,
+            fa = viewState::startReposFragment
         )
-    }
 
     val startReposFragment: (String) -> Unit = { profileName ->
-		router.navigateTo(SCREEN_REPOS, profileName)
-	}
+        router.navigateTo(SCREEN_REPOS, profileName)
+    }
 
 }

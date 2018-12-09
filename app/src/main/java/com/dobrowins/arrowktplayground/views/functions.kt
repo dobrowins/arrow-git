@@ -1,17 +1,18 @@
 package com.dobrowins.arrowktplayground.views
 
-import arrow.core.Either
-import arrow.core.Option
+import arrow.data.Validated
+import arrow.data.invalid
+import arrow.data.valid
 import kotlinx.coroutines.Job
 
 /**
  * @author Artem Dobrovinskiy
  */
-val isEmpty: (String?) -> Either<Throwable, String> = { s ->
-	when (s.isNullOrEmpty()) {
-		true -> Either.Left(IllegalArgumentException("parameter can't be empty"))
-		false -> Either.Right(s)
-	}
+val validateString: (String, (String) -> Boolean) -> Validated<Exception, String> = { email, f ->
+    when (f(email)) {
+        true -> email.valid()
+        false -> IllegalArgumentException("email is invalid").invalid()
+    }
 }
 
 fun cancelJob(job: Job): (Throwable) -> Throwable = {
