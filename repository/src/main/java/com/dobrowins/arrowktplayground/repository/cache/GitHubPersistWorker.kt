@@ -20,6 +20,11 @@ class GitHubPersistWorker @Inject constructor() : PersistWorker() {
 			?.filterNotNull()
 			?.first { it.full_name == repositoryName }
 
+	val clearCache: () -> Boolean = {
+		deleteByKey(keyReposCache, bookName)
+		get(keyReposCache, null, bookName) == null
+	}
+
 	private val getAllRepositoriesFromCacheOrNull: () -> List<RepositoryDataResponse?>? = {
 		get<List<RepositoryDataResponse?>?>(keyReposCache, null, bookName)
 	}

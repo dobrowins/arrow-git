@@ -4,7 +4,7 @@ import arrow.effects.IO
 import com.dobrowins.arrowktplayground.domain.DispatchersProvider
 import com.dobrowins.arrowktplayground.domain.data.GitHubRepository
 import com.dobrowins.arrowktplayground.domain.data.RepositoryData
-import com.dobrowins.arrowktplayground.repository.api.GithubApi
+import com.dobrowins.arrowktplayground.repository.api.GithubApiImpl
 import com.dobrowins.arrowktplayground.repository.cache.GitHubPersistWorker
 import javax.inject.Inject
 
@@ -12,7 +12,7 @@ import javax.inject.Inject
  * @author Artem Dobrovinskiy
  */
 class GitHubRepositoryImpl @Inject constructor(
-    private val githubApi: GithubApi,
+    private val githubApiImpl: GithubApiImpl,
     private val gitHubPersistWorker: GitHubPersistWorker,
     dispatchersProvider: DispatchersProvider
 ) : GitHubRepository {
@@ -32,7 +32,7 @@ class GitHubRepositoryImpl @Inject constructor(
             .map(mapToRepositoryData)
 
     private val getUserReposUnsafe: (String) -> List<RepositoryDataResponse?>? =
-        { s -> githubApi.getUserRepos(s).execute().body() }
+        { s -> githubApiImpl.getUserRepos(s) }
 
     private val cache: (List<RepositoryDataResponse?>?) -> List<RepositoryDataResponse> =
         { responseList ->
