@@ -17,6 +17,10 @@ abstract class BasePresenter<V : MvpView> : MvpPresenter<V>(), CoroutineScope {
 
     val addJobToScope: (Job) -> Unit = { coroutineContext + it }
 
+    fun Job.addToScope() {
+        coroutineContext + this
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         coroutineContext.cancelChildren()

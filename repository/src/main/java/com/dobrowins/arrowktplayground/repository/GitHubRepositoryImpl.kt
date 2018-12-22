@@ -1,5 +1,6 @@
 package com.dobrowins.arrowktplayground.repository
 
+import arrow.core.Try
 import arrow.effects.IO
 import com.dobrowins.arrowktplayground.domain.DispatchersProvider
 import com.dobrowins.arrowktplayground.domain.data.GitHubRepository
@@ -19,28 +20,37 @@ class GitHubRepositoryImpl @Inject constructor(
 
     private val ioScope = dispatchersProvider.io
 
-    override fun loadRepositoriesById(profileName: String): IO<List<RepositoryData?>?> =
-        IO.invoke(ioScope) {
+    override fun loadRepositoriesById(profileName: String): Try<List<RepositoryData?>?> =
+        Try {
             getUserReposUnsafe(profileName)
                 ?.filterNotNull()
-                ?.let(cache)
                 ?.map(mapToRepositoryData)
         }
 
     override fun getRepositoryFromCache(repositoryId: String?): IO<RepositoryData?> =
         IO.invoke(ioScope) { gitHubPersistWorker.getRepositoryFromCache(repositoryId) }
-            .map(mapToRepositoryData)
+
+    override fun cache(responseList: List<RepositoryData?>?): List<RepositoryData> =
+        responseList?.filterNotNull()?.let { list ->
+            gitHubPersistWorker.put(list)
+            list
+        } ?: emptyList()
 
     private val getUserReposUnsafe: (String) -> List<RepositoryDataResponse?>? =
-        { s -> githubApiImpl.getUserRepos(s) }
+        githubApiImpl::getUserRepos
 
-    private val cache: (List<RepositoryDataResponse?>?) -> List<RepositoryDataResponse> =
-        { responseList ->
-            responseList?.let { list ->
-                val filtered = list.filterNotNull()
-                gitHubPersistWorker.put(filtered)
-                filtered
-            } ?: emptyList()
-        }
+    private val mapToRepositoryData: (RepositoryDataResponse?) -> RepositoryData? = { data ->
+        if (data == null) data
+        else RepositoryData(
+            id = data.id,
+            name = data.name,
+            fullName = data.full_name,
+            htmlUrl = data.html_url,
+            description = data.description,
+            language = data.language,
+            forkedCount = data.forks,
+            starredCount = data.stargazers_count
+        )
+    }
 
 }

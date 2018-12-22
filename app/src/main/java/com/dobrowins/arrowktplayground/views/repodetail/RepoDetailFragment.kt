@@ -17,7 +17,8 @@ import javax.inject.Inject
  * @author Artem Dobrovinskiy
  */
 interface RepoDetailView : BaseView {
-	fun initView(repoData: RepositoryData)
+    // TODO: move to separate file
+    fun initView(repoData: RepositoryData)
 	fun showSnackbar(message: String)
 }
 

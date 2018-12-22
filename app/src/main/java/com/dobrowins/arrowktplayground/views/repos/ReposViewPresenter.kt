@@ -32,12 +32,10 @@ class ReposViewPresenter @Inject constructor(
         val fetchReposJob = Job()
         addJobToScope(fetchReposJob)
         launch {
-            reposViewInteractor.fetchReposData(profileName).unsafeRunAsync {
-                it.fold(
-                    ifLeft = cancelJob(fetchReposJob) forwardCompose displayErrorMessage,
-                    ifRight = mapToOption forwardCompose showItemsOrErrorIfNull
-                )
-            }
+            reposViewInteractor.fetchReposData(profileName).fold(
+                ifLeft = cancelJob(fetchReposJob) forwardCompose displayErrorMessage,
+                ifRight = mapToOption forwardCompose showItemsOrErrorIfNull
+            )
         }
     }
 

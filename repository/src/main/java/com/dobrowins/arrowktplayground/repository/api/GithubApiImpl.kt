@@ -10,8 +10,7 @@ class GithubApiImpl @Inject constructor(
 	private val githubApi: GithubApi
 ) {
 
-	val getUserRepos: (String) -> List<RepositoryDataResponse?>? = { profileName ->
+    fun getUserRepos(profileName: String): List<RepositoryDataResponse?>? =
 		githubApi.getUserRepos(profileName).execute().body()
-	}
 
 }

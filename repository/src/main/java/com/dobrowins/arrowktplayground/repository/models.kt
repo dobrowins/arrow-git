@@ -2,10 +2,6 @@ package com.dobrowins.arrowktplayground.repository
 
 import com.google.gson.annotations.SerializedName
 
-/**
- * @author Artem Dobrovinskiy
- */
-
 data class ReposResponse(
     val repos: List<RepositoryDataResponse?>
 )
