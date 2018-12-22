@@ -8,10 +8,11 @@ import kotlinx.coroutines.Job
 /**
  * @author Artem Dobrovinskiy
  */
+
 val validateString: (String, (String) -> Boolean) -> Validated<Exception, String> = { text, λ ->
     when (λ(text)) {
         true -> text.valid()
-        false -> IllegalArgumentException("Invalid input").invalid()
+        false -> IllegalArgumentException("Input is invalid").invalid()
     }
 }
 
