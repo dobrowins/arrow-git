@@ -4,8 +4,8 @@ apply plugin: 'kotlin-kapt'
 apply from: '../deps.gradle'
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation(
+            fileTree(dir: 'libs', include: ['*.jar']),
             deps.kotlin.stdlib.jdk,
             deps.inject,
             deps.toothpick.runtime,
@@ -25,6 +25,11 @@ dependencies {
     )
     kapt(
             deps.toothpick.compiler
+    )
+    testImplementation(
+            deps.junit,
+            deps.mockito.mockito,
+            deps.mockito.mockito-kotlin,
     )
 }
 

@@ -1,6 +1,8 @@
 package com.dobrowins.arrowktplayground.domain
 
 import arrow.core.Either
+import arrow.core.Left
+import arrow.core.Right
 import arrow.syntax.function.forwardCompose
 import com.dobrowins.arrowktplayground.domain.data.GitHubRepository
 import com.dobrowins.arrowktplayground.domain.data.RepositoryData
@@ -16,8 +18,8 @@ class ReposViewInteractorImpl @Inject constructor(
     override suspend fun fetchReposData(profileName: String): Either<Throwable, List<RepositoryData>> =
         gitHubRepository.loadRepositoriesById(profileName)
             .fold(
-                ifFailure = { Either.left(it) },
-                ifSuccess = gitHubRepository::cache forwardCompose { Either.right(it) }
+                ifFailure = ::Left,
+                ifSuccess = gitHubRepository::cache forwardCompose ::Right
             )
 
 }
