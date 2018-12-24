@@ -21,4 +21,9 @@ fun cancelJob(job: Job): (Throwable) -> Throwable = {
 	it
 }
 
-val mapThrowableMessage: (Throwable) -> String = { it.message ?: "Unknown error" }
+val mapThrowableMessage: (Throwable) -> String = { t ->
+	val cause = t.cause?.toString() ?: "Unknown cause"
+	val message = t.message ?: "Unknown error"
+	val string = "Cause: $cause, message: $message"
+	string
+}

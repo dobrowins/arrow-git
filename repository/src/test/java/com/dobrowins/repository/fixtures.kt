@@ -1,5 +1,6 @@
 package com.dobrowins.repository
 
+import com.dobrowins.arrowktplayground.domain.data.RepositoryData
 import com.dobrowins.arrowktplayground.repository.RepositoryDataResponse
 
 /**
@@ -7,11 +8,23 @@ import com.dobrowins.arrowktplayground.repository.RepositoryDataResponse
  */
 object GithubApiFixture {
 
-    val repositoryDataResponseList: List<RepositoryDataResponse?>?
-        get() = listOf(
-            repositoryDataResponse
-        )
+	val repositoryData: RepositoryData?
+		get() = RepositoryData(
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null
+		)
 
-    val repositoryDataResponse: RepositoryDataResponse
-        get() = RepositoryDataResponse()
+	val repositoryDataResponseList: List<RepositoryDataResponse?>?
+		get() = listOf(
+			repositoryDataResponse
+		)
+
+	val repositoryDataResponse: RepositoryDataResponse
+		get() = RepositoryDataResponse()
 }

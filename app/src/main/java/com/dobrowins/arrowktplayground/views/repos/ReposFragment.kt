@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.transition.TransitionManager
 import android.view.View
+import android.view.animation.AnimationUtils
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.dobrowins.arrowktplayground.R
@@ -51,7 +52,7 @@ class ReposFragment : BaseFragment(), ReposView {
 		loadRepos()
 	}
 
-    override fun showSnackbar(message: String) = showSnackbar(rootFragmentRepos, message)
+	override fun showSnackbar(message: String) = showSnackbar(rootFragmentRepos, message)
 
 	override fun showErrorItem() = TODO("show fullscreen error item")
 
@@ -79,10 +80,9 @@ class ReposFragment : BaseFragment(), ReposView {
 		rvReposFragment.run {
 			adapter = reposAdapter
 			setHasFixedSize(true)
+			AnimationUtils.loadLayoutAnimation(activity, R.anim.layout_animation_fall_down)
+				?.let(::setLayoutAnimation)
 		}
-		// TODO: add animation appear from bottom upwards
-		TransitionManager.beginDelayedTransition(rootFragmentRepos)
-		rvReposFragment.visibility = View.VISIBLE
 	}
 
 }

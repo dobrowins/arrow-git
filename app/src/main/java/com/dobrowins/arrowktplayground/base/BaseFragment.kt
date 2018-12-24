@@ -15,8 +15,6 @@ import toothpick.Toothpick
  */
 abstract class BaseFragment : Fragment() {
 
-	// TODO: place all presenter onAttach, onDestroy methods here
-
     abstract val layoutId: Int
 
     override fun onCreate(savedInstanceState: Bundle?) {

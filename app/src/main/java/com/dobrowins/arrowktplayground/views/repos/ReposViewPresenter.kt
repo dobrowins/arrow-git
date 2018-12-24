@@ -23,56 +23,58 @@ import javax.inject.Inject
  */
 @InjectViewState
 class ReposViewPresenter @Inject constructor(
-    private val router: Router,
-    private val reposViewInteractor: ReposViewInteractor,
-    private val context: Context
+	private val router: Router,
+	private val reposViewInteractor: ReposViewInteractor,
+	private val context: Context
 ) : BasePresenter<ReposView>() {
 
-    fun loadData(profileName: String) {
-        val fetchReposJob = Job()
-        addJobToScope(fetchReposJob)
-        launch {
-            reposViewInteractor.fetchReposData(profileName).fold(
-                ifLeft = cancelJob(fetchReposJob) forwardCompose displayErrorMessage,
-                ifRight = List<RepositoryData?>::filterNotNull
-                        forwardCompose List<RepositoryData>::toOption
-                        forwardCompose showItemsOrErrorIfNull
-            )
-        }
-    }
+	fun loadData(profileName: String) {
+		val fetchReposJob = Job()
+		addJobToScope(fetchReposJob)
+		launch {
+			reposViewInteractor.fetchReposData(profileName).unsafeRunAsync {
+				it.fold(
+					ifLeft = cancelJob(fetchReposJob) forwardCompose displayErrorMessage,
+					ifRight = List<RepositoryData?>::filterNotNull
+							forwardCompose List<RepositoryData>::toOption
+							forwardCompose showItemsOrErrorIfNull
+				)
+			}
+		}
+	}
 
-    fun onToolbarNavigationIconPressed() = router.navigateTo(SCREEN_START)
+	fun onToolbarNavigationIconPressed() = router.navigateTo(SCREEN_START)
 
-    fun onRepoItemClicked(repoName: String) = router.navigateTo(SCREEN_REPO_DETAIL, repoName)
+	fun onRepoItemClicked(repoName: String) = router.navigateTo(SCREEN_REPO_DETAIL, repoName)
 
-    private val displayErrorMessage = mapThrowableMessage forwardCompose viewState::showSnackbar
+	private val displayErrorMessage = mapThrowableMessage forwardCompose viewState::showSnackbar
 
-    private val showItemsOrErrorIfNull: (Option<List<RepositoryData>>) -> Unit = {
-        it.fold(
-            ifEmpty = { viewState.showSnackbar("No items to display") },
-            ifSome = mapToItems forwardCompose viewState::showRepos
-        )
-    }
+	private val showItemsOrErrorIfNull: (Option<List<RepositoryData>>) -> Unit = {
+		it.fold(
+			ifEmpty = { viewState.showSnackbar("No items to display") },
+			ifSome = mapToItems forwardCompose viewState::showRepos
+		)
+	}
 
-    private val mapToItems: (List<RepositoryData>) -> List<RepoItem> = { responseRepos ->
-        responseRepos.map { data ->
-            RepoItem(
-                id = data.id ?: "unknown id",
-                name = data.name ?: "unknown name",
-                fullName = data.fullName ?: "unknown full name",
-                htmlUrl = data.htmlUrl ?: "unknown url",
-                description = data.description.orEmpty(),
-                language = data.language.orEmpty(),
-                forkedText = String.format(
-                    context.getString(R.string.format_string_item_forked_count),
-                    data.forkedCount ?: 0
-                ),
-                starredText = String.format(
-                    context.getString(R.string.format_string_item_starred_count),
-                    data.starredCount ?: 0
-                )
-            )
-        }
-    }
+	private val mapToItems: (List<RepositoryData>) -> List<RepoItem> = { responseRepos ->
+		responseRepos.map { data ->
+			RepoItem(
+				id = data.id ?: "unknown id",
+				name = data.name ?: "unknown name",
+				fullName = data.fullName ?: "unknown full name",
+				htmlUrl = data.htmlUrl ?: "unknown url",
+				description = data.description.orEmpty(),
+				language = data.language.orEmpty(),
+				forkedText = String.format(
+					context.getString(R.string.format_string_item_forked_count),
+					data.forkedCount ?: 0
+				),
+				starredText = String.format(
+					context.getString(R.string.format_string_item_starred_count),
+					data.starredCount ?: 0
+				)
+			)
+		}
+	}
 
 }

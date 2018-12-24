@@ -16,12 +16,6 @@ import javax.inject.Inject
 /**
  * @author Artem Dobrovinskiy
  */
-interface RepoDetailView : BaseView {
-    // TODO: move to separate file
-    fun initView(repoData: RepositoryData)
-	fun showSnackbar(message: String)
-}
-
 class RepoDetailFragment : BaseFragment(), RepoDetailView {
 
 	companion object {
@@ -73,5 +67,10 @@ class RepoDetailFragment : BaseFragment(), RepoDetailView {
 					ContextCompat.getDrawable(context, R.drawable.ic_arrow_back_white_24dp)
 			setNavigationOnClickListener { presenter.onNavigationIconClicked() }
 		}
+
+	override fun onDestroyView() {
+		presenter.detachView(this)
+		super.onDestroyView()
+	}
 
 }
