@@ -1,9 +1,6 @@
 package com.dobrowins.arrowktplayground.di.modules
 
-import com.dobrowins.arrowktplayground.domain.RepoDetailInteractor
-import com.dobrowins.arrowktplayground.domain.RepoDetailInteractorImpl
-import com.dobrowins.arrowktplayground.domain.ReposViewInteractor
-import com.dobrowins.arrowktplayground.domain.ReposViewInteractorImpl
+import com.dobrowins.arrowktplayground.domain.*
 import toothpick.config.Module
 
 /**
@@ -12,6 +9,7 @@ import toothpick.config.Module
 class DomainModule : Module() {
 
     init {
+        bind(StartViewInteractor::class.java).to(StartViewInteractorImpl::class.java)
         bind(ReposViewInteractor::class.java).to(ReposViewInteractorImpl::class.java)
         bind(RepoDetailInteractor::class.java).to(RepoDetailInteractorImpl::class.java)
     }

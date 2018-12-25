@@ -72,6 +72,8 @@ dependencies {
 
     testImplementation(
             deps.junit,
+            deps.mockito.mockito,
+            deps.mockito.mockito-kotlin,
     )
 
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
