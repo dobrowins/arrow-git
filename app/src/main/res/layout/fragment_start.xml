@@ -16,6 +16,7 @@
         android:fontFamily="@font/noto_sans"
         android:gravity="center_horizontal"
         android:hint="Enter profile's name. E.g., «dobrowins»"
+        android:text="dobrowins"
         android:imeOptions="actionDone"
         android:inputType="textPersonName"
         android:singleLine="true"

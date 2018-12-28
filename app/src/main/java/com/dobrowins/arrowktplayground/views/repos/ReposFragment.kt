@@ -49,7 +49,7 @@ class ReposFragment : BaseFragment(), ReposView {
 		super.onViewCreated(view, savedInstanceState)
 		presenter.attachView(this)
 		initToolbar()
-		loadRepos()
+		loadRepos(profileName)
 	}
 
 	override fun showSnackbar(message: String) = showSnackbar(rootFragmentRepos, message)
@@ -70,7 +70,7 @@ class ReposFragment : BaseFragment(), ReposView {
 		}
 	}
 
-	private fun loadRepos() = presenter.loadData(profileName)
+	private fun loadRepos(profileName: String) = profileName.let(presenter::loadData)
 
 	override fun showRepos(repos: List<RepoItem>): Unit = runOnUiThread {
 		val reposAdapter = ReposAdapter(

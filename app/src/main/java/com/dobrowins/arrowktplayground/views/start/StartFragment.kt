@@ -1,6 +1,7 @@
 package com.dobrowins.arrowktplayground.views.start
 
 import android.os.Bundle
+import android.text.Editable
 import android.view.View
 import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
 import android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE
@@ -9,7 +10,8 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.dobrowins.arrowktplayground.R
 import com.dobrowins.arrowktplayground.base.BaseFragment
-import kotlinx.android.synthetic.main.fragment_start.*
+import kotlinx.android.synthetic.main.fragment_start.etStartFragment
+import kotlinx.android.synthetic.main.fragment_start.rootStartFragment
 import javax.inject.Inject
 
 /**

@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import arrow.core.toOption
 import com.arellomobile.mvp.MvpAppCompatActivity
+import com.dobrowins.arrowktplayground.R
 import com.dobrowins.arrowktplayground.R.id
 import com.dobrowins.arrowktplayground.R.layout
 import com.dobrowins.arrowktplayground.base.BaseFragment
@@ -18,7 +19,10 @@ import com.dobrowins.arrowktplayground.views.repos.ReposFragment
 import com.dobrowins.arrowktplayground.views.start.StartFragment
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.android.SupportFragmentNavigator
+import ru.terrakok.cicerone.commands.Back
+import ru.terrakok.cicerone.commands.BackTo
 import ru.terrakok.cicerone.commands.Command
+import ru.terrakok.cicerone.commands.Forward
 import ru.terrakok.cicerone.commands.Replace
 import toothpick.Toothpick
 import javax.inject.Inject
@@ -54,7 +58,18 @@ class MainActivity : MvpAppCompatActivity() {
 				nextFragment: Fragment?,
 				fragmentTransaction: FragmentTransaction?
 			) {
-				// TODO: add slide from right and slide from left animations
+				when (command) {
+					is Forward -> {
+						fragmentTransaction?.setCustomAnimations(
+							R.anim.enter_from_right,
+							R.anim.exit_to_left,
+							R.anim.enter_from_left,
+							R.anim.exit_to_right
+						)
+					}
+					is Replace -> {
+					}
+				}
 			}
 		}
 
@@ -70,6 +85,7 @@ class MainActivity : MvpAppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(layout.activity_main)
 		savedInstanceState.toOption().fold(startAnew, restoreState)
+		navigatorHolder.setNavigator(navigator)
 	}
 
 	private fun inject() {
@@ -82,7 +98,7 @@ class MainActivity : MvpAppCompatActivity() {
 
 	override fun onResume() {
 		super.onResume()
-		navigatorHolder.setNavigator(navigator)
+
 	}
 
 	override fun onPause() {

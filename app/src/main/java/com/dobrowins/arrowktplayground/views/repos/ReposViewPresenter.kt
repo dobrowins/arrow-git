@@ -43,7 +43,7 @@ class ReposViewPresenter @Inject constructor(
 		}
 	}
 
-	fun onToolbarNavigationIconPressed() = router.navigateTo(SCREEN_START)
+	fun onToolbarNavigationIconPressed() = router.backTo(SCREEN_START)
 
 	fun onRepoItemClicked(repoName: String) = router.navigateTo(SCREEN_REPO_DETAIL, repoName)
 

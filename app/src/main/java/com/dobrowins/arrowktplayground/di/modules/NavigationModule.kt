@@ -4,6 +4,7 @@ import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
 import toothpick.config.Module
+import javax.inject.Singleton
 
 /**
  * @author: Artem Dobrovinsky

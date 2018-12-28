@@ -7,10 +7,12 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.dobrowins.arrowktplayground.R
 import com.dobrowins.arrowktplayground.base.BaseFragment
-import com.dobrowins.arrowktplayground.base.BaseView
 import com.dobrowins.arrowktplayground.domain.data.RepositoryData
 import com.dobrowins.arrowktplayground.views.KEY_REPO_NAME
-import kotlinx.android.synthetic.main.fragment_repo_detail.*
+import kotlinx.android.synthetic.main.fragment_repo_detail.rootFragmentRepoDetail
+import kotlinx.android.synthetic.main.fragment_repo_detail.tbFragmentRepoDetail
+import kotlinx.android.synthetic.main.fragment_repo_detail.tvFragmentRepoDetailDescription
+import kotlinx.android.synthetic.main.fragment_repo_detail.tvFragmentRepoDetailTitle
 import javax.inject.Inject
 
 /**
