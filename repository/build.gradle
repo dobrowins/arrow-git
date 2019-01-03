@@ -13,11 +13,16 @@ android {
         versionName config.versionName
         testInstrumentationRunner config.testInstrumentationRunner
     }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+    
 }
 
 kapt {
     arguments{
-        arg("toothpick_registry_package_name", "com.dobrowins.arrowktplayground.repository")
+        arg("toothpick_registry_package_name", "com.dobrowins.arrowgit.repository")
     }
 }
 

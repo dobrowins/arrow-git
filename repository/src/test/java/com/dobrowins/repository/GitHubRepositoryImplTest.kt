@@ -1,11 +1,9 @@
 package com.dobrowins.repository
 
-import com.dobrowins.arrowktplayground.domain.DispatchersProvider
-import com.dobrowins.arrowktplayground.repository.GitHubRepositoryImpl
-import com.dobrowins.arrowktplayground.repository.api.GithubApiImpl
-import com.dobrowins.arrowktplayground.repository.cache.GitHubPersistWorker
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import com.dobrowins.arrowgit.domain.DispatchersProvider
+import com.dobrowins.arrowgit.repository.GitHubRepositoryImpl
+import com.dobrowins.arrowgit.repository.api.GithubApiImpl
+import com.dobrowins.arrowgit.repository.cache.GitHubPersistWorker
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Before
@@ -23,18 +21,11 @@ import kotlin.test.assertNull
 @RunWith(JUnit4::class)
 class GitHubRepositoryImplTest {
 
-    companion object {
-        private const val REPO_FAIL = "fail"
-        private const val REPO_SUCCESS = "success"
-    }
-
     private lateinit var repository: GitHubRepositoryImpl
     private val apiImplMock: GithubApiImpl
     private val persistWorkerMock: GitHubPersistWorker
     private val dispatchersMock: DispatchersProvider
     private lateinit var mockWebServer: MockWebServer
-    private val supervisorJob = SupervisorJob()
-    private val testScope = Dispatchers.Default + supervisorJob
 
     init {
         MockitoAnnotations.initMocks(this@GitHubRepositoryImplTest)
@@ -91,6 +82,11 @@ class GitHubRepositoryImplTest {
             val cached = repository.getRepositoryFromCache(REPO_FAIL).unsafeRunSync()
             assertNull(cached)
         }
+    }
+
+    companion object {
+        private const val REPO_FAIL = "fail"
+        private const val REPO_SUCCESS = "success"
     }
 
 }

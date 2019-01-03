@@ -1,6 +1,6 @@
 package com.dobrowins.repository
 
-import com.dobrowins.arrowktplayground.domain.DispatchersProvider
+import com.dobrowins.arrowgit.domain.DispatchersProvider
 import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext
 

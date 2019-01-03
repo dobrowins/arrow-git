@@ -17,10 +17,10 @@ android {
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [
-                        toothpick_registry_package_name          : 'com.dobrowins.arrowktplayground',
+                        toothpick_registry_package_name          : 'com.dobrowins.arrowgit',
                         toothpick_registry_children_package_names: """
-                        com.dobrowins.arrowktplayground.domain, 
-                        com.dobrowins.arrowktplayground.repository
+                        com.dobrowins.arrowgit.domain, 
+                        com.dobrowins.arrowgit.repository
                     """
                 ]
             }
@@ -44,6 +44,11 @@ android {
             debuggable true
         }
     }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
 }
 
 configurations.all {
@@ -76,5 +81,9 @@ dependencies {
             deps.mockito.mockito-kotlin,
     )
 
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation(
+            'com.android.support.test:runner:1.0.2',
+            deps.mockito.mockito,
+            deps.mockito.mockito-kotlin,
+    )
 }

@@ -1,7 +1,7 @@
 package com.dobrowins.repository
 
-import com.dobrowins.arrowktplayground.domain.data.RepositoryData
-import com.dobrowins.arrowktplayground.repository.RepositoryDataResponse
+import com.dobrowins.arrowgit.domain.data.RepositoryData
+import com.dobrowins.arrowgit.repository.RepositoryDataResponse
 
 /**
  * @author Artem Dobrovinskiy

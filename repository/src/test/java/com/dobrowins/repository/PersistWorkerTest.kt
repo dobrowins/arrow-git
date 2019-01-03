@@ -1,6 +1,6 @@
 package com.dobrowins.repository
 
-import com.dobrowins.arrowktplayground.repository.cache.GitHubPersistWorker
+import com.dobrowins.arrowgit.repository.cache.GitHubPersistWorker
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

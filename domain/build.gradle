@@ -47,8 +47,12 @@ compileTestKotlin {
     }
 }
 
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+}
+
 kapt {
     arguments {
-        arg("toothpick_registry_package_name", "com.dobrowins.arrowktplayground.domain")
+        arg("toothpick_registry_package_name", "com.dobrowins.arrowgit.domain")
     }
 }
