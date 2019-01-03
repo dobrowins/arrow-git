@@ -75,7 +75,7 @@ ext {
                     ],
                     'test'       : [
                             'runner': "com.android.support.test:runner:${versions.atsl}",
-                            'rules' : "com.android.support.test:rules${versions.atsl}",
+                            'rules' : "com.android.support.test:rules:${versions.atsl}",
                     ],
                     'dataBinding': 'com.android.databinding:compiler:3.0.1',
             ],
@@ -145,6 +145,7 @@ ext {
             ],
             'mockito'              : [
                     'mockito'       : 'org.mockito:mockito-core:2.18.0',
+                    'mockitoAndroid': 'org.mockito:mockito-android:2.23.4',
                     'mockito-kotlin': 'com.nhaarman:mockito-kotlin-kt1.1:1.5.0',
                     'dexmaker'      : 'com.linkedin.dexmaker:dexmaker-mockito:2.16.0',
             ],

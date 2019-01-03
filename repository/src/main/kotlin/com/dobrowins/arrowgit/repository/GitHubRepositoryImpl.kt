@@ -32,11 +32,11 @@ class GitHubRepositoryImpl @Inject constructor(
             repositoryId?.let(gitHubPersistWorker::getRepositoryFromCache)
         }
 
-    override fun cache(responseList: List<RepositoryData?>?): List<RepositoryData> =
-        responseList?.filterNotNull()?.let { list ->
+    override fun cache(responseList: List<RepositoryData?>): List<RepositoryData> =
+        responseList.filterNotNull().let { list ->
             gitHubPersistWorker.put(list)
             list
-        } ?: emptyList()
+        }
 
     private fun getUserReposUnsafe(profileName: String): List<RepositoryDataResponse?>? =
         githubApiImpl.getUserRepos(profileName)

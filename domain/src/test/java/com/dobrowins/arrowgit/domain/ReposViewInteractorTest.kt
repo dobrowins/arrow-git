@@ -9,6 +9,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 import kotlin.coroutines.CoroutineContext
@@ -46,13 +47,16 @@ class ReposViewInteractorTest : CoroutineScope {
 	@Test
 	fun `fetchReposData triggers caching of mapped response and returns right either if fetching were successful`() {
 		runBlocking {
-			`when`(githubRepositoryMock.loadRepositoriesById(""))
+            `when`(githubRepositoryMock.loadRepositoriesById(STRING_PROFILE_NAME))
 				.thenReturn(IO.just(emptyList()))
-			`when`(githubRepositoryMock.cache(emptyList()))
+            `when`(githubRepositoryMock.cache(ArgumentMatchers.anyList()))
 				.thenReturn(emptyList())
-			reposViewInteractor.fetchReposData("").unsafeRunSync()
-			verify(githubRepositoryMock, times(1)).cache(emptyList())
+            reposViewInteractor.fetchReposData(STRING_PROFILE_NAME).unsafeRunSync()
 		}
 	}
+
+    companion object {
+        private const val STRING_PROFILE_NAME = "dummy"
+    }
 
 }

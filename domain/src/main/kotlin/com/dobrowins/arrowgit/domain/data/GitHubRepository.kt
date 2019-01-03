@@ -7,6 +7,6 @@ import arrow.effects.IO
  */
 interface GitHubRepository {
     suspend fun loadRepositoriesById(profileName: String): IO<List<RepositoryData?>>
-    fun cache(responseList: List<RepositoryData?>?): List<RepositoryData>
+    fun cache(responseList: List<RepositoryData?>): List<RepositoryData>
     suspend fun getRepositoryFromCache(repositoryId: String?): IO<RepositoryData?>
 }

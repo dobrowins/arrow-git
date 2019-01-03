@@ -52,6 +52,10 @@ android {
 }
 
 configurations.all {
+    resolutionStrategy {
+        // for mockito-kotlin to work properly when used in instrumentation tests
+        force 'org.objenesis:objenesis:2.6'
+    }
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
         def requested = details.requested
         if (requested.group == "com.android.support") {
@@ -81,9 +85,4 @@ dependencies {
             deps.mockito.mockito-kotlin,
     )
 
-    androidTestImplementation(
-            'com.android.support.test:runner:1.0.2',
-            deps.mockito.mockito,
-            deps.mockito.mockito-kotlin,
-    )
 }
