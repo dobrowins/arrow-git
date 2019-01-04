@@ -19,47 +19,47 @@ import toothpick.registries.MemberInjectorRegistryLocator
  */
 class ArrowApplication : Application() {
 
-	private val isDebugOption: Option<Boolean> = if (BuildConfig.DEBUG) Some(true) else None
+    private val isDebugOption: Option<Boolean> = if (BuildConfig.DEBUG) Some(true) else None
 
-	private val setDebugOptions: () -> Unit = {
-		Timber.plant(DebugTree())
-	}
+    private val setDebugOptions: () -> Unit = {
+        Timber.plant(DebugTree())
+    }
 
-	private val setReleaseOptions: (Boolean) -> Unit = {
+    private val setReleaseOptions: (Boolean) -> Unit = {
 
-	}
+    }
 
-	private val setDebugToothpick: (Boolean) -> Unit = {
-		Toothpick.setConfiguration(Configuration.forDevelopment().enableReflection())
-	}
+    private val setDebugToothpick: (Boolean) -> Unit = {
+        Toothpick.setConfiguration(Configuration.forDevelopment().enableReflection())
+    }
 
-	private val setReleaseToothpick: () -> Unit = {
-		Toothpick.setConfiguration(Configuration.forProduction().disableReflection())
+    private val setReleaseToothpick: () -> Unit = {
+        Toothpick.setConfiguration(Configuration.forProduction().disableReflection())
         FactoryRegistryLocator.setRootRegistry(com.dobrowins.arrowgit.FactoryRegistry())
         MemberInjectorRegistryLocator.setRootRegistry(com.dobrowins.arrowgit.MemberInjectorRegistry())
-	}
+    }
 
-	override fun onCreate() {
-		super.onCreate()
-		isDebugOption.fold(setDebugOptions, setReleaseOptions)
-		initToothpick()
+    override fun onCreate() {
+        super.onCreate()
+        isDebugOption.fold(setDebugOptions, setReleaseOptions)
+        initToothpick()
         initPaper()
-	}
+    }
 
     private fun initPaper() = Paper.init(this@ArrowApplication)
 
-	private fun initToothpick() =
-		isDebugOption.fold(setReleaseToothpick, setDebugToothpick)
-			.also {
-				val appScope = Toothpick.openScope(Scopes.APPLICATION)
-				appScope.installModules(
+    private fun initToothpick() =
+        isDebugOption.fold(setReleaseToothpick, setDebugToothpick)
+            .also {
+                val appScope = Toothpick.openScope(Scopes.APPLICATION)
+                appScope.installModules(
                     AndroidModule(this@ArrowApplication),
                     NavigationModule(),
                     DomainModule(),
                     RepositoriesModule(),
                     ApiModule()
-				)
-				Toothpick.inject(this, appScope)
-			}
+                )
+                Toothpick.inject(this, appScope)
+            }
 
 }
