@@ -53,7 +53,7 @@ android {
 
 configurations.all {
     resolutionStrategy {
-        // for mockito-kotlin to work properly when used in instrumentation tests
+        // for mockitoKotlin to work properly when used in instrumentation tests
         force 'org.objenesis:objenesis:2.6'
     }
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
@@ -82,7 +82,7 @@ dependencies {
     testImplementation(
             deps.junit,
             deps.mockito.mockito,
-            deps.mockito.mockito-kotlin,
+            deps.mockito.mockitoKotlin,
     )
 
 }

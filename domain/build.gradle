@@ -29,7 +29,7 @@ dependencies {
     testImplementation(
             deps.junit,
             deps.mockito.mockito,
-            deps.mockito.mockito-kotlin,
+            deps.mockito.mockitoKotlin,
     )
 }
 

@@ -6,6 +6,6 @@ import com.dobrowins.arrowgit.base.BaseView
  * @author: Artem Dobrovinsky
  */
 interface StartView : BaseView {
-	fun startReposFragment(profileName: String)
-	fun showSnackbar(message: String)
+    fun startReposFragment(profileName: String)
+    fun showSnackbar(message: String)
 }

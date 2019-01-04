@@ -40,8 +40,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvRepoItemTitle"
         app:layout_constraintVertical_bias="0.0"
-        tools:text="https://github.zombieweather.com"
-        />
+        tools:text="https://github.zombieweather.com" />
+
     <TextView
         android:id="@+id/tvRepoItemLanguage"
         android:layout_width="wrap_content"
@@ -53,8 +53,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvRepoItemUrl"
-        tools:text="Java"
-        />
+        tools:text="Java" />
+
     <TextView
         android:id="@+id/tvRepoItemStarredCount"
         android:layout_width="wrap_content"
@@ -63,8 +63,8 @@
         android:fontFamily="@font/noto_sans"
         app:layout_constraintStart_toEndOf="@+id/tvRepoItemForkedCount"
         app:layout_constraintTop_toBottomOf="@+id/tvRepoItemUrl"
-        tools:text="Forked: 1488"
-        />
+        tools:text="Forked: 1488" />
+
     <TextView
         android:id="@+id/tvRepoItemForkedCount"
         android:layout_width="wrap_content"
@@ -73,7 +73,6 @@
         android:fontFamily="@font/noto_sans"
         app:layout_constraintStart_toEndOf="@+id/tvRepoItemLanguage"
         app:layout_constraintTop_toBottomOf="@+id/tvRepoItemUrl"
-        tools:text="Starred: 1488"
-        />
+        tools:text="Starred: 1488" />
 
 </android.support.constraint.ConstraintLayout>

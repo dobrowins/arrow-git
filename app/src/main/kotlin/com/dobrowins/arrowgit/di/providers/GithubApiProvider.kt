@@ -10,7 +10,7 @@ import javax.inject.Provider
  */
 class GithubApiProvider @Inject constructor(
     private val retrofit: Retrofit
-): Provider<GithubApi> {
+) : Provider<GithubApi> {
 
     override fun get(): GithubApi = retrofit.create(GithubApi::class.java)
 

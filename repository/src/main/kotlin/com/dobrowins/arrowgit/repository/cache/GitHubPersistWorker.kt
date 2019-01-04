@@ -8,28 +8,28 @@ import javax.inject.Inject
  */
 class GitHubPersistWorker @Inject constructor() : PersistWorker() {
 
-	private val bookName = "github response cache"
-	private val keyReposCache = "github response repos cache"
+    private val bookName = "github response cache"
+    private val keyReposCache = "github response repos cache"
 
-	fun put(repos: List<RepositoryData>) {
-		getAllRepositoriesFromCacheOrNull()?.let {
-			deleteByKey(keyReposCache, bookName)
-		}
-		put(keyReposCache, repos, bookName)
-	}
+    fun put(repos: List<RepositoryData>) {
+        getAllRepositoriesFromCacheOrNull()?.let {
+            deleteByKey(keyReposCache, bookName)
+        }
+        put(keyReposCache, repos, bookName)
+    }
 
     fun getRepositoryFromCache(repositoryName: String?): RepositoryData? =
-		getAllRepositoriesFromCacheOrNull()
-			?.filterNotNull()
+        getAllRepositoriesFromCacheOrNull()
+            ?.filterNotNull()
             ?.first { it.fullName == repositoryName }
 
-	val clearCache: () -> Boolean = {
-		deleteByKey(keyReposCache, bookName)
-		get(keyReposCache, null, bookName) == null
-	}
+    val clearCache: () -> Boolean = {
+        deleteByKey(keyReposCache, bookName)
+        get(keyReposCache, null, bookName) == null
+    }
 
     private val getAllRepositoriesFromCacheOrNull: () -> List<RepositoryData?>? = {
         get<List<RepositoryData?>?>(keyReposCache, null, bookName)
-	}
+    }
 
 }

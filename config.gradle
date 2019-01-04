@@ -1,14 +1,14 @@
 ext {
 
-  config = [
-      'compileSdkVersion'        : 28,
-      'applicationId'            : "com.dobrowins.arrowgit",
-      'minSdkVersion'            : 21,
-      'targetSdkVersion'         : 28,
-      'versionCode'              : 1,
-      'versionName'              : "1.0",
-      'testInstrumentationRunner': "android.support.test.runner.AndroidJUnitRunner",
-      'androidXInstrumentationRunner': "androidx.test.runner.AndroidJUnitRunner",
-  ]
+    config = [
+            'compileSdkVersion'            : 28,
+            'applicationId'                : "com.dobrowins.arrowgit",
+            'minSdkVersion'                : 21,
+            'targetSdkVersion'             : 28,
+            'versionCode'                  : 1,
+            'versionName'                  : "1.0",
+            'testInstrumentationRunner'    : "android.support.test.runner.AndroidJUnitRunner",
+            'androidXInstrumentationRunner': "androidx.test.runner.AndroidJUnitRunner",
+    ]
 
 }

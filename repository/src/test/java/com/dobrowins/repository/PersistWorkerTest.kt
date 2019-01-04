@@ -8,16 +8,16 @@ import org.junit.Before
  */
 class GitHubPersistWorkerTest {
 
-	private val testBookName = "test book name"
-	private val testIntKey = "test int key"
-	private lateinit var githubPersistWorker: GitHubPersistWorker
+    private val testBookName = "test book name"
+    private val testIntKey = "test int key"
+    private lateinit var githubPersistWorker: GitHubPersistWorker
 
-	@Before
-	fun init() {
-		githubPersistWorker = GitHubPersistWorker()
-		// every test assumes that nothing is stored
-		githubPersistWorker.clearCache()
-	}
+    @Before
+    fun init() {
+        githubPersistWorker = GitHubPersistWorker()
+        // every test assumes that nothing is stored
+        githubPersistWorker.clearCache()
+    }
 
     // TODO: cover repository with tests
 

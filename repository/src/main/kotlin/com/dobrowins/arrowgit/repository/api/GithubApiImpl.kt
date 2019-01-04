@@ -7,10 +7,10 @@ import javax.inject.Inject
  * @author: Artem Dobrovinsky
  */
 class GithubApiImpl @Inject constructor(
-	private val githubApi: GithubApi
+    private val githubApi: GithubApi
 ) {
 
-	fun getUserRepos(profileName: String): List<RepositoryDataResponse?>? =
-		githubApi.getUserRepos(profileName).execute().body()
+    fun getUserRepos(profileName: String): List<RepositoryDataResponse?>? =
+        githubApi.getUserRepos(profileName).execute().body()
 
 }

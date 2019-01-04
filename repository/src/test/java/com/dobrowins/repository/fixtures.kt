@@ -8,23 +8,23 @@ import com.dobrowins.arrowgit.repository.RepositoryDataResponse
  */
 object GithubApiFixture {
 
-	val repositoryData: RepositoryData?
-		get() = RepositoryData(
-			null,
-			null,
-			null,
-			null,
-			null,
-			null,
-			null,
-			null
-		)
+    val repositoryData: RepositoryData?
+        get() = RepositoryData(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
 
-	val repositoryDataResponseList: List<RepositoryDataResponse?>?
-		get() = listOf(
-			repositoryDataResponse
-		)
+    val repositoryDataResponseList: List<RepositoryDataResponse?>?
+        get() = listOf(
+            repositoryDataResponse
+        )
 
-	val repositoryDataResponse: RepositoryDataResponse
-		get() = RepositoryDataResponse()
+    val repositoryDataResponse: RepositoryDataResponse
+        get() = RepositoryDataResponse()
 }

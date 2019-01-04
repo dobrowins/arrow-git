@@ -12,10 +12,10 @@ import toothpick.config.Module
  */
 class AndroidModule(application: Application) : Module() {
 
-	init {
-		bind(Context::class.java).toInstance(application)
-		bind(Resources::class.java).toInstance(application.resources)
-		bind(DispatchersProvider::class.java).toInstance(DispatchersProviderImpl())
-	}
+    init {
+        bind(Context::class.java).toInstance(application)
+        bind(Resources::class.java).toInstance(application.resources)
+        bind(DispatchersProvider::class.java).toInstance(DispatchersProviderImpl())
+    }
 
 }

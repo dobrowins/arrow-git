@@ -20,60 +20,60 @@ import javax.inject.Inject
  */
 class ReposFragment : BaseFragment(), ReposView {
 
-	@Inject
-	@InjectPresenter
-	lateinit var presenter: ReposViewPresenter
+    @Inject
+    @InjectPresenter
+    lateinit var presenter: ReposViewPresenter
 
-	@ProvidePresenter
-	fun providePresenter() = presenter
+    @ProvidePresenter
+    fun providePresenter() = presenter
 
-	override val layoutId: Int = R.layout.fragment_repos
+    override val layoutId: Int = R.layout.fragment_repos
 
-	private lateinit var profileName: String
+    private lateinit var profileName: String
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		profileName = arguments?.getString(KEY_PROFILE_NAME).orEmpty()
-	}
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        profileName = arguments?.getString(KEY_PROFILE_NAME).orEmpty()
+    }
 
-	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-		super.onViewCreated(view, savedInstanceState)
-		presenter.attachView(this)
-		initToolbar()
-		loadRepos(profileName)
-	}
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        presenter.attachView(this)
+        initToolbar()
+        loadRepos(profileName)
+    }
 
-	override fun showSnackbar(message: String) = showSnackbar(rootFragmentRepos, message)
+    override fun showSnackbar(message: String) = showSnackbar(rootFragmentRepos, message)
 
-	private fun initToolbar() {
-		tbFragmentRepos.apply {
-			title = profileName
-			setTitleTextColor(
-				ContextCompat.getColor(
-					activity?.baseContext as Context,
-					android.R.color.white
-				)
-			)
-			setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-			setNavigationOnClickListener { presenter.onToolbarNavigationIconPressed() }
-		}
-	}
+    private fun initToolbar() {
+        tbFragmentRepos.apply {
+            title = profileName
+            setTitleTextColor(
+                ContextCompat.getColor(
+                    activity?.baseContext as Context,
+                    android.R.color.white
+                )
+            )
+            setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
+            setNavigationOnClickListener { presenter.onToolbarNavigationIconPressed() }
+        }
+    }
 
-	private fun loadRepos(profileName: String) = profileName.let(presenter::loadData)
+    private fun loadRepos(profileName: String) = profileName.let(presenter::loadData)
 
     override fun showItems(repos: List<HolderType>): Unit = runOnUiThread {
-		val reposAdapter = ReposAdapter(
+        val reposAdapter = ReposAdapter(
             repoOnClickFunc = presenter::onRepoItemClicked,
             errorOnClickFunc = {}
         )
-		reposAdapter.add(repos)
-		rvReposFragment.run {
-			adapter = reposAdapter
-			setHasFixedSize(true)
-			AnimationUtils.loadLayoutAnimation(activity, R.anim.layout_animation_fall_down)
-				?.let(::setLayoutAnimation)
-		}
-	}
+        reposAdapter.add(repos)
+        rvReposFragment.run {
+            adapter = reposAdapter
+            setHasFixedSize(true)
+            AnimationUtils.loadLayoutAnimation(activity, R.anim.layout_animation_fall_down)
+                ?.let(::setLayoutAnimation)
+        }
+    }
 
     companion object {
         fun getInstance(data: String): ReposFragment {

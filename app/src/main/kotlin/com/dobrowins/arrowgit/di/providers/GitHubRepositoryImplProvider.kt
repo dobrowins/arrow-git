@@ -13,11 +13,11 @@ import javax.inject.Provider
 class GitHubRepositoryImplProvider
 @Inject constructor(
     private val githubApiImpl: GithubApiImpl,
-	private val gitHubPersistWorker: GitHubPersistWorker,
-	private val dispatchersProvider: DispatchersProvider
+    private val gitHubPersistWorker: GitHubPersistWorker,
+    private val dispatchersProvider: DispatchersProvider
 ) : Provider<GitHubRepositoryImpl> {
 
     override fun get(): GitHubRepositoryImpl =
-		GitHubRepositoryImpl(githubApiImpl, gitHubPersistWorker, dispatchersProvider)
+        GitHubRepositoryImpl(githubApiImpl, gitHubPersistWorker, dispatchersProvider)
 
 }

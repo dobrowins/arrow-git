@@ -8,7 +8,7 @@ import kotlin.coroutines.CoroutineContext
 /**
  * @author: Artem Dobrovinsky
  */
-class DispatchersProviderImpl @Inject constructor(): DispatchersProvider {
+class DispatchersProviderImpl @Inject constructor() : DispatchersProvider {
     override val main: CoroutineContext = Dispatchers.Main
     override val io: CoroutineContext = Dispatchers.IO
     override val default: CoroutineContext = Dispatchers.Default

@@ -9,10 +9,10 @@ import javax.inject.Inject
  * @author Artem Dobrovinskiy
  */
 class RepoDetailInteractorImpl @Inject constructor(
-	private val gitHubRepository: GitHubRepository
+    private val gitHubRepository: GitHubRepository
 ) : RepoDetailInteractor {
 
-	override suspend fun getRepoData(repoId: String?): IO<RepositoryData?> =
-		gitHubRepository.getRepositoryFromCache(repoId)
+    override suspend fun getRepoData(repoId: String?): IO<RepositoryData?> =
+        gitHubRepository.getRepositoryFromCache(repoId)
 
 }

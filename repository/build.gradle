@@ -44,7 +44,7 @@ dependencies {
 
     testImplementation(
             deps.mockito.mockito,
-            deps.mockito.mockito-kotlin,
+            deps.mockito.mockitoKotlin,
             deps.okhttp.mockWebServer,
             deps.kotlin.test.jdk,
             deps.junit,
