@@ -1,0 +1,88 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply from: "../deps.gradle"
+apply from: "../config.gradle"
+
+android {
+    compileSdkVersion config.compileSdkVersion
+    defaultConfig {
+        applicationId config.applicationId
+        minSdkVersion config.minSdkVersion
+        targetSdkVersion config.targetSdkVersion
+        versionCode config.versionCode
+        versionName config.versionName
+        testInstrumentationRunner config.testInstrumentationRunner
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        toothpick_registry_package_name          : 'com.dobrowins.arrowgit',
+                        toothpick_registry_children_package_names: """
+                        com.dobrowins.arrowgit.domain, 
+                        com.dobrowins.arrowgit.repository
+                    """
+                ]
+            }
+        }
+    }
+
+    def baseUrl = '"' + 'https://api.github.com' + '"'
+    def apiVersion = '"' + 'V3' + '"'
+    buildTypes {
+        all {
+            buildConfigField 'String', 'BASE_URL', baseUrl
+            buildConfigField "String", "API_VER", apiVersion
+        }
+        release {
+            minifyEnabled false
+            debuggable false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            debuggable true
+        }
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+}
+
+configurations.all {
+    resolutionStrategy {
+        // for mockito-kotlin to work properly when used in instrumentation tests
+        force 'org.objenesis:objenesis:2.6'
+    }
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == "com.android.support") {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion "28.+"
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation(
+            fileTree(dir: 'libs', include: ['*.jar']),
+            project(path: ':common'),
+            project(path: ':repository'),
+            project(path: ':domain'),
+    )
+
+    kapt(
+            deps.moxy.compiler,
+            deps.toothpick.compiler
+    )
+
+    testImplementation(
+            deps.junit,
+            deps.mockito.mockito,
+            deps.mockito.mockito-kotlin,
+    )
+
+}

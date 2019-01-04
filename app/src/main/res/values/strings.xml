@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">arrowgit</string>
+
+    <string name="format_string_item_forked_count">Forked: %s</string>
+    <string name="format_string_item_starred_count">Starred: %s</string>
+
+    <!--ERRORS-->
+    <string name="error_view_title">Oops, something went wrong: %s</string>
+    <string name="error_unknown">Unknown error</string>
+    <string name="error_no_items">No items to display</string>
+    <string name="error_no_data">No data to display</string>
+
+    <!--DEFAULTS-->
+    <string name="default_id">unknown id</string>
+    <string name="default_name">unknown name</string>
+    <string name="default_full_name">unknown full name</string>
+    <string name="default_url">unknown url</string>
+
+</resources>
